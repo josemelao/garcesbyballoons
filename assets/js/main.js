@@ -287,6 +287,7 @@
     var tiles = $$('#gallery .tile');
     var filterButtons = $$('.filter');
     var emptyMsg = $('#gallery-empty');
+    var galleryStatus = $('#gallery-status');
 
     filterButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -304,6 +305,13 @@
         });
 
         if (emptyMsg) { emptyMsg.hidden = visible > 0; }
+
+        /* 3.5 / 5.10 — anuncia a contagem para leitores de tela */
+        if (galleryStatus) {
+          galleryStatus.textContent = visible > 0
+            ? visible + (visible === 1 ? ' referência nesta categoria.' : ' referências nesta categoria.')
+            : 'Nenhuma referência nesta categoria.';
+        }
       });
     });
 
@@ -318,12 +326,17 @@
     var lastFocused = null;
 
     function openLightbox(tile) {
-      if (!lightbox || typeof lightbox.showModal !== 'function') { return; }
-
       var img = $('img', tile);
-      lastFocused = tile;
+      var full = tile.getAttribute('data-full') || (img ? img.src : '');
 
-      lightboxImg.src = tile.getAttribute('data-full') || (img ? img.src : '');
+      /* 3.6 — navegador sem suporte a <dialog>: abre a imagem em nova aba */
+      if (!lightbox || typeof lightbox.showModal !== 'function') {
+        if (full) { window.open(full, '_blank', 'noopener'); }
+        return;
+      }
+
+      lastFocused = tile;
+      lightboxImg.src = full;
       lightboxImg.alt = img ? img.alt : '';
       lightboxTitle.textContent = tile.getAttribute('data-title') || '';
       lightboxCat.textContent = tile.getAttribute('data-cat-label') || '';

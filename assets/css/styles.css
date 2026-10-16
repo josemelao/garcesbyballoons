@@ -568,12 +568,14 @@ body.menu-open::before {
 .gallery__note svg { flex: none; margin-top: 3px; color: var(--gold); }
 .gallery__note strong { color: var(--text); }
 
+/* 3.5 — os filtros dependem de JS: só aparecem quando o JS está ativo */
 .filters {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: var(--sp-3);
   margin-bottom: var(--sp-10);
 }
+.js .filters { display: flex; }
 .filter {
   padding: var(--sp-2) var(--sp-5);
   min-height: 40px;
