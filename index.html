@@ -247,61 +247,46 @@
   <div class="container">
     <div class="section-head" data-reveal>
       <p class="eyebrow">Serviços</p>
-      <h2 class="section-title">Quatro frentes, uma especialidade</h2>
+      <h2 class="section-title">Três frentes, uma especialidade</h2>
       <p class="section-lead">
         Tudo o que a Garcês by Balloons faz gira em torno do mesmo material: o balão.
         Decoração, orientação técnica e formação.
       </p>
     </div>
 
-    <div class="grid grid--4" data-reveal-group>
-      <article class="card">
-        <span class="card__index" aria-hidden="true">01</span>
+    <div class="services">
+      <article class="service--feature" data-reveal>
         <span class="card__icon" aria-hidden="true">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3.3 0 6 2.7 6 6 0 3.8-3.9 7.2-5.4 8.6a.85.85 0 0 1-1.2 0C9.9 16.2 6 12.8 6 9c0-3.3 2.7-6 6-6Z"/><path d="M12 18v3"/></svg>
         </span>
-        <h3 class="card__title">Decoração com balões para eventos</h3>
-        <p class="card__text">
-          Composições em balões para aniversários, casamentos, inaugurações, festas e
-          eventos corporativos, pensadas para o espaço e para a proposta de cada celebração.
+        <p class="service__tag">Serviço principal</p>
+        <h3 class="service__title">Decoração de eventos</h3>
+        <p class="service__text">
+          Aniversários, casamentos, inaugurações e eventos corporativos, do conceito à montagem.
         </p>
+        <a class="service__link" href="#galeria">
+          Ver galeria
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </article>
 
-      <article class="card">
-        <span class="card__index" aria-hidden="true">02</span>
-        <span class="card__icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4.5 9.2A2 2 0 0 1 17.7 21H6.3a2 2 0 0 1-1.8-2.8L9 8V3Z"/><path d="M8 3h8M8.5 13h7"/></svg>
-        </span>
-        <h3 class="card__title">Consultoria em decoração com balões</h3>
-        <p class="card__text">
-          Orientação técnica para quem vai decorar um evento e quer direção sobre
-          composição, paleta, estrutura e organização dos elementos.
-        </p>
-      </article>
+      <div class="services__list" data-reveal-group>
+        <article class="service">
+          <span class="service__index" aria-hidden="true">01</span>
+          <div class="service__body">
+            <h3 class="service__title">Consultoria</h3>
+            <p class="service__text">Direção de composição, paleta e estrutura para quem vai decorar.</p>
+          </div>
+        </article>
 
-      <article class="card">
-        <span class="card__index" aria-hidden="true">03</span>
-        <span class="card__icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 8.5 12 13l9.5-4.5L12 4Z"/><path d="M6 10.6V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5.4"/><path d="M21.5 8.5V14"/></svg>
-        </span>
-        <h3 class="card__title">Workshop para iniciantes</h3>
-        <p class="card__text">
-          Formação prática para quem quer começar na decoração com balões, partindo do
-          zero com orientação de quem trabalha na área.
-        </p>
-      </article>
-
-      <article class="card">
-        <span class="card__index" aria-hidden="true">04</span>
-        <span class="card__icon" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>
-        </span>
-        <h3 class="card__title">Workshop de aperfeiçoamento</h3>
-        <p class="card__text">
-          Para quem já trabalha com balões e quer evoluir em técnica, acabamento e
-          repertório de composições.
-        </p>
-      </article>
+        <article class="service">
+          <span class="service__index" aria-hidden="true">02</span>
+          <div class="service__body">
+            <h3 class="service__title">Workshop de balões</h3>
+            <p class="service__text">Formação para iniciantes e para quem já trabalha: das bases à técnica e acabamento.</p>
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </section>
@@ -646,54 +631,67 @@
       </p>
     </div>
 
-    <div class="coverage__grid">
-      <div data-reveal>
-        <div class="coverage__card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            Cidade Ocidental – GO
-          </h3>
-          <p>Cidade base do atendimento.</p>
-          <div class="coverage__cities">
-            <span class="city city--primary">Cidade Ocidental</span>
-          </div>
-        </div>
-
-        <div class="coverage__card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.4 5.3 3.4 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.4-5.3-3.4-8.5S9.8 5.9 12 3.5Z"/></svg>
-            Cidades próximas
-          </h3>
-          <p>Atendimento na região do entorno, conforme agendamento.</p>
-        </div>
-
-        <div class="coverage__card">
-          <h3>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg>
-            Distrito Federal
-          </h3>
-          <p>Projetos em Brasília e demais regiões administrativas do DF.</p>
+    <div class="coverage__grid" data-reveal-group>
+      <div class="coverage__card">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          Cidade Ocidental – GO
+        </h3>
+        <p>Cidade base do atendimento.</p>
+        <div class="coverage__cities">
+          <span class="city city--primary">Cidade Ocidental</span>
         </div>
       </div>
 
-      <div class="coverage__aside" data-reveal>
-        <div class="card coverage__cta">
-          <h3 class="card__title">Sua cidade está fora da lista?</h3>
-          <p class="card__text">
-            Envie os detalhes do evento pelo formulário. O deslocamento e a
-            disponibilidade são confirmados no orçamento, sem compromisso.
-          </p>
-          <div class="coverage__cta-actions">
-            <a class="btn btn--gold" href="#contato">
-              Pedir orçamento
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <button class="btn btn--ghost" type="button" data-wa>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.06c-.24.68-1.42 1.3-1.96 1.36-.5.06-1.12.09-1.81-.11-.42-.13-.95-.3-1.63-.6-2.87-1.24-4.74-4.13-4.88-4.32-.14-.19-1.16-1.55-1.16-2.95 0-1.4.73-2.09 1-2.38.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.57.81 1.97.88 2.11.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.14.14-.29.29-.13.57.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.41.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.29.14.48.21.55.33.07.12.07.68-.17 1.36Z"/></svg>
-              WhatsApp
-            </button>
-          </div>
+      <div class="coverage__card">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.4 5.3 3.4 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.4-5.3-3.4-8.5S9.8 5.9 12 3.5Z"/></svg>
+          Cidades próximas
+        </h3>
+        <p>Atendimento no entorno de Cidade Ocidental, conforme agendamento.</p>
+        <div class="coverage__cities">
+          <span class="city">Novo Gama</span>
+          <span class="city">Valparaíso de Goiás</span>
+          <span class="city">Luziânia</span>
+          <span class="city">Santo Antônio do Descoberto</span>
+          <span class="city">Águas Lindas de Goiás</span>
         </div>
+      </div>
+
+      <div class="coverage__card">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5"/></svg>
+          Distrito Federal
+        </h3>
+        <p>Projetos em Brasília e demais regiões administrativas do DF.</p>
+        <div class="coverage__cities">
+          <span class="city">Brasília (Plano Piloto)</span>
+          <span class="city">Águas Claras</span>
+          <span class="city">Taguatinga</span>
+          <span class="city">Ceilândia</span>
+          <span class="city">Gama</span>
+          <span class="city">Samambaia</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="coverage__cta-banner" data-reveal>
+      <div class="coverage__cta-copy">
+        <h3>Sua cidade está fora da lista?</h3>
+        <p>
+          Envie os detalhes do evento pelo formulário. O deslocamento e a
+          disponibilidade são confirmados no orçamento, sem compromisso.
+        </p>
+      </div>
+      <div class="coverage__cta-actions">
+        <a class="btn btn--gold" href="#contato">
+          Pedir orçamento
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <button class="btn btn--ghost" type="button" data-wa>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.06c-.24.68-1.42 1.3-1.96 1.36-.5.06-1.12.09-1.81-.11-.42-.13-.95-.3-1.63-.6-2.87-1.24-4.74-4.13-4.88-4.32-.14-.19-1.16-1.55-1.16-2.95 0-1.4.73-2.09 1-2.38.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.57.81 1.97.88 2.11.07.14.12.31.02.5-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.14.14-.29.29-.13.57.17.29.74 1.22 1.59 1.98 1.09.97 2.01 1.27 2.3 1.41.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.29.14.48.21.55.33.07.12.07.68-.17 1.36Z"/></svg>
+          WhatsApp
+        </button>
       </div>
     </div>
   </div>

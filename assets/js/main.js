@@ -124,6 +124,23 @@
       el.textContent = value;
     });
 
+    /* Pré-visualização: mantém os contatos visíveis como "a definir" para o
+       layout da coluna ficar completo — sem links fictícios. */
+    if (previewMode) {
+      $$('.contact__info [data-cfg-item]').forEach(function (el) {
+        el.hidden = false;
+        var a = $('a', el);
+        if (!a) { return; }
+        var key = a.getAttribute('data-cfg-text');
+        var label = key === 'email' ? 'E-mail a definir'
+                  : key === 'instagramHandle' ? 'Instagram a definir'
+                  : 'Número a definir';
+        a.removeAttribute('href');
+        a.classList.add('is-pending');
+        a.textContent = label;
+      });
+    }
+
     $$('[data-cfg-href]').forEach(function (el) {
       var key = el.getAttribute('data-cfg-href');
       var href = '';
@@ -762,9 +779,13 @@
         finishClose();
       }
 
-      summary.addEventListener('click', function () {
+      summary.addEventListener('click', function (e) {
         /* abrir: deixa o comportamento nativo do <details> */
-        if (!item.open || closing) { return; }
+        if (!item.open) { return; }
+
+        /* fechar: impede o fechamento imediato do <details> para animar */
+        e.preventDefault();
+        if (closing) { return; }
 
         closing = true;
         item.classList.add('is-closing');
