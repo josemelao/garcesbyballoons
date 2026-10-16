@@ -94,7 +94,7 @@
 
   /* --- Motion ------------------------------------------------------------ */
   --dur-hover:   180ms;
-  --dur-reveal:  420ms;
+  --dur-reveal:  480ms;
   --dur-slow:    620ms;
   --dur-stagger: 60ms;
   --ease-hover:  cubic-bezier(0.2, 0.8, 0.3, 1);

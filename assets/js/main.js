@@ -282,6 +282,31 @@
     }
 
     /* -------------------------------------------------------------------
+       6b. Parallax leve do hero (contido; desligado em movimento reduzido)
+       ------------------------------------------------------------------- */
+    var heroEl = $('.hero');
+    var heroMedia = $('.hero__media');
+
+    if (heroEl && heroMedia && !prefersReduced()) {
+      var heroRaf = false;
+      var updateHero = function () {
+        heroRaf = false;
+        var y = window.scrollY || window.pageYOffset || 0;
+        if (y > heroEl.offsetHeight) { return; }
+        heroMedia.style.transform =
+          'translate3d(0, ' + (y * 0.05).toFixed(2) + 'px, 0) scale(1.12)';
+      };
+
+      window.addEventListener('scroll', function () {
+        if (heroRaf) { return; }
+        heroRaf = true;
+        requestAnimationFrame(updateHero);
+      }, { passive: true });
+
+      updateHero();
+    }
+
+    /* -------------------------------------------------------------------
        7. Galeria: filtros
        ------------------------------------------------------------------- */
     var tiles = $$('#gallery .tile');

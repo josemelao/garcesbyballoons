@@ -439,6 +439,8 @@ body.menu-open::before {
   height: 100%;
   opacity: 0.5;
 }
+/* 4.x — leve parallax: a mídia fica um pouco maior para o deslocamento não abrir vãos */
+.js .hero__media { transform: scale(1.12); will-change: transform; }
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -1400,6 +1402,8 @@ body.menu-open::before {
   .socials button:hover { transform: none; }
 
   .tile:hover img { transform: none; }
+
+  .js .hero__media { transform: none; will-change: auto; }
 }
 
 /* --------------------------------------------------------------------------
@@ -1408,5 +1412,5 @@ body.menu-open::before {
 @media print {
   .nav, .wa-bubble, .hero__media, .preview-notice { display: none; }
   body { background: #fff; color: #000; }
-  .faq__a { display: block !important; }
+  .faq__body { grid-template-rows: 1fr !important; }
 }
