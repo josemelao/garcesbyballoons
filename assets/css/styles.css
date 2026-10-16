@@ -1232,6 +1232,42 @@ p { text-wrap: pretty; }
 .js [data-reveal-group].is-visible > *:nth-child(n + 9) { animation-delay: 410ms; }
 
 /* --------------------------------------------------------------------------
+   19b. Página legal (Política de Privacidade)
+   -------------------------------------------------------------------------- */
+.legal { max-width: 74ch; margin-inline: auto; }
+.legal__meta {
+  margin-bottom: var(--sp-10);
+  padding-bottom: var(--sp-6);
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+.legal h2 {
+  font-size: var(--fs-h3);
+  margin-top: var(--sp-12);
+}
+.legal h2:first-child { margin-top: 0; }
+.legal h3 {
+  font-size: 1.05rem;
+  margin-top: var(--sp-8);
+}
+.legal p { margin-top: var(--sp-4); color: var(--text-muted); }
+.legal ul,
+.legal ol {
+  margin-top: var(--sp-4);
+  display: grid;
+  gap: var(--sp-3);
+  padding-left: var(--sp-6);
+}
+.legal ul { list-style: disc; }
+.legal ol { list-style: decimal; }
+.legal li { color: var(--text-muted); }
+.legal strong { color: var(--text); }
+.legal a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+.legal a:hover { color: var(--gold-light); }
+.legal__back { margin-top: var(--sp-16); }
+
+/* --------------------------------------------------------------------------
    20. Movimento reduzido
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
