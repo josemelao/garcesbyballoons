@@ -1,0 +1,62 @@
+{
+  "assets/js/config.js": {
+    "mtime": 1792105168.2211916,
+    "seen": 1792113008.2142441,
+    "ast_hash": "3b59a88cd28433c3babba29c099502ed",
+    "semantic_hash": "3b59a88cd28433c3babba29c099502ed"
+  },
+  "assets/js/main.js": {
+    "mtime": 1792105460.7463784,
+    "seen": 1792113008.214249,
+    "ast_hash": "dd485ae2188532074da6490532356f9f",
+    "semantic_hash": "dd485ae2188532074da6490532356f9f"
+  },
+  ".opencode/agents/pev/architect.md": {
+    "mtime": 1792107505.0091295,
+    "seen": 1792113008.2142527,
+    "ast_hash": "e5a6ebd520c02f9e30f0ab4fded7d24e",
+    "semantic_hash": "e5a6ebd520c02f9e30f0ab4fded7d24e"
+  },
+  ".opencode/agents/pev/coder.md": {
+    "mtime": 1792107505.0100653,
+    "seen": 1792113008.2142544,
+    "ast_hash": "9d226ff904e0261108324d51491da936",
+    "semantic_hash": "9d226ff904e0261108324d51491da936"
+  },
+  ".opencode/agents/pev/qa.md": {
+    "mtime": 1792107505.0100653,
+    "seen": 1792113008.2142558,
+    "ast_hash": "adebe3a6775e0a83afcf5f232eb015ab",
+    "semantic_hash": "adebe3a6775e0a83afcf5f232eb015ab"
+  },
+  ".opencode/commands/pev.md": {
+    "mtime": 1792107108.8320732,
+    "seen": 1792113008.2142699,
+    "ast_hash": "f52a17ee58faf579bea90936738e3241",
+    "semantic_hash": "f52a17ee58faf579bea90936738e3241"
+  },
+  ".opencode/skills/pev-workflow/SKILL.md": {
+    "mtime": 1792107511.1519582,
+    "seen": 1792113008.2142713,
+    "ast_hash": "c9a95b90181193b3a9c6e2fd7aee0f22",
+    "semantic_hash": "c9a95b90181193b3a9c6e2fd7aee0f22"
+  },
+  "README.md": {
+    "mtime": 1792105526.056288,
+    "seen": 1792113008.2142725,
+    "ast_hash": "5fc39d561e2480f39b8c224e0f049eb0",
+    "semantic_hash": "5fc39d561e2480f39b8c224e0f049eb0"
+  },
+  "index.html": {
+    "mtime": 1792108207.454805,
+    "seen": 1792113008.2142735,
+    "ast_hash": "4627e3c3589ea6d153a6af2e1bf6290e",
+    "semantic_hash": "4627e3c3589ea6d153a6af2e1bf6290e"
+  },
+  "relatorio.md": {
+    "mtime": 1792106294.6754053,
+    "seen": 1792113008.214275,
+    "ast_hash": "d5c0a7b8dfb9f35ca686a745553495c7",
+    "semantic_hash": "d5c0a7b8dfb9f35ca686a745553495c7"
+  }
+}

@@ -1,0 +1,108 @@
+/* ==========================================================================
+   GARCES by Balloons — Design Tokens
+   Direção: Dark Luxury Editorial
+   Base: ui-ux-pro-max (Luxury/Premium Brand + Home Decoration + Classic Elegant)
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Superfícies ------------------------------------------------------- */
+  --bg:           #0C0A09;
+  --bg-soft:      #171412;
+  --surface:      #1C1917;
+  --surface-2:    #292524;
+  --border:       #2E2A27;
+  --border-control: #8A8580;
+  --border-gold:  rgba(212, 175, 55, 0.18);
+  --border-gold-strong: rgba(212, 175, 55, 0.38);
+
+  /* --- Texto ------------------------------------------------------------- */
+  --text:         #FAF5F2;
+  --text-muted:   #A8A29E;
+  --text-dim:     #8A8580;
+
+  /* --- Acento ------------------------------------------------------------ */
+  --gold:         #D4AF37;
+  --gold-light:   #E8CD6B;
+  --gold-deep:    #A16207;
+  --gold-on-cream: #7C4A00;
+  --gold-wash:    rgba(212, 175, 55, 0.10);
+  --on-gold:      #0C0A09;
+
+  /* --- Estados ----------------------------------------------------------- */
+  --error:        #F87171;
+  --error-bg:     rgba(248, 113, 113, 0.10);
+  --success:      #4ADE80;
+  --success-bg:   rgba(74, 222, 128, 0.10);
+  --wa:           #25D366;
+  --wa-dark:      #1EBE55;
+
+  /* --- Faixa clara ------------------------------------------------------- */
+  --cream:        #FAF5F2;
+  --cream-soft:   #F1EBE6;
+  --cream-ink:    #1C1917;
+  --cream-muted:  #57534E;
+
+  /* --- Tipografia -------------------------------------------------------- */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  --fs-hero:   clamp(2.5rem, 6.5vw, 5.25rem);
+  --fs-h2:     clamp(1.85rem, 4vw, 3rem);
+  --fs-h3:     clamp(1.25rem, 2vw, 1.55rem);
+  --fs-lead:   clamp(1.02rem, 1.5vw, 1.22rem);
+  --fs-body:   1.0625rem;
+  --fs-small:  0.9375rem;
+  --fs-label:  0.75rem;
+
+  --lh-tight:  1.08;
+  --lh-snug:   1.25;
+  --lh-body:   1.68;
+
+  /* --- Espaçamento (base 4/8) -------------------------------------------- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --sp-24: 96px;
+  --sp-32: 128px;
+
+  --section-y: clamp(64px, 9vw, 128px);
+  --gutter:    clamp(20px, 5vw, 48px);
+
+  /* --- Layout ------------------------------------------------------------ */
+  --maxw:       1240px;
+  --maxw-text:  680px;
+  --radius-sm:  3px;
+  --radius:     6px;
+  --radius-lg:  12px;
+  --radius-pill: 999px;
+
+  /* --- Elevação ---------------------------------------------------------- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --shadow-gold: 0 12px 32px rgba(212, 175, 55, 0.16);
+
+  /* --- Motion ------------------------------------------------------------ */
+  --dur-hover:   180ms;
+  --dur-reveal:  420ms;
+  --dur-slow:    620ms;
+  --ease-hover:  cubic-bezier(0.2, 0.8, 0.3, 1);
+  --ease-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --z-base:    1;
+  --z-sticky:  100;
+  --z-bubble:  200;
+  --z-dialog:  300;
+
+  --nav-h: 74px;
+}

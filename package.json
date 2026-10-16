@@ -1,0 +1,13 @@
+{
+  "name": "garces-by-balloons",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Site estatico Garces by Balloons — ferramentas de desenvolvimento (testes). Nao afeta o site publicado.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
+  }
+}
