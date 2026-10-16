@@ -96,6 +96,7 @@
   --dur-hover:   180ms;
   --dur-reveal:  420ms;
   --dur-slow:    620ms;
+  --dur-stagger: 60ms;
   --ease-hover:  cubic-bezier(0.2, 0.8, 0.3, 1);
   --ease-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
 
