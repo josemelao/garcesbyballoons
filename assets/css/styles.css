@@ -379,6 +379,33 @@ p { text-wrap: pretty; }
   .nav.is-open .nav__actions .btn--gold { display: none; }
 }
 
+/* 2.1#5 — CTA dentro do painel do menu mobile (oculto no desktop) */
+.nav__cta { display: none; }
+@media (max-width: 1080px) {
+  .nav.is-open .nav__cta {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: var(--sp-5);
+  }
+}
+
+/* 5.4 — evita aperto do header logo acima do breakpoint do menu (1081–1160) */
+@media (min-width: 1081px) and (max-width: 1160px) {
+  .nav__inner { gap: var(--sp-4); }
+  .nav__links { gap: var(--sp-4); }
+  .nav__actions { gap: var(--sp-2); }
+}
+
+/* 5.5 — menu mobile aberto: bloqueia o scroll e escurece o fundo */
+body.menu-open { overflow: hidden; }
+body.menu-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-sticky) - 1);
+  background: rgba(12, 10, 9, 0.62);
+}
+
 /* --------------------------------------------------------------------------
    8. Hero
    -------------------------------------------------------------------------- */

@@ -196,31 +196,41 @@
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    function closeMenu() {
+    /* 5.5 — abre/fecha o menu com scroll lock e (opcional) retorno de foco */
+    function setMenu(open, moveFocus) {
       if (!nav || !navToggle) { return; }
-      nav.classList.remove('is-open');
-      navToggle.setAttribute('aria-expanded', 'false');
-      navToggle.setAttribute('aria-label', 'Abrir menu de navegação');
+      nav.classList.toggle('is-open', open);
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      navToggle.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+      document.body.classList.toggle('menu-open', open);
+      if (!open && moveFocus) { navToggle.focus(); }
     }
+    function closeMenu() { setMenu(false, false); }
 
     if (navToggle && nav) {
       navToggle.addEventListener('click', function () {
-        var open = nav.classList.toggle('is-open');
-        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        navToggle.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+        setMenu(!nav.classList.contains('is-open'), false);
       });
     }
 
-    $$('.nav__link').forEach(function (link) {
-      link.addEventListener('click', closeMenu);
+    $$('.nav__link, .nav__cta').forEach(function (link) {
+      link.addEventListener('click', function () { setMenu(false, false); });
     });
 
+    /* 5.6 — Esc fecha o menu e devolve o foco ao botão do menu */
     doc.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeMenu(); }
+      if (e.key === 'Escape') { setMenu(false, true); }
+    });
+
+    /* 5.5 — clique fora do painel fecha o menu (inclui o scrim de fundo) */
+    doc.addEventListener('click', function (e) {
+      if (!nav || !nav.classList.contains('is-open')) { return; }
+      if (e.target.closest && (e.target.closest('.nav__links') || e.target.closest('#nav-toggle'))) { return; }
+      setMenu(false, false);
     });
 
     window.addEventListener('resize', function () {
-      if (window.innerWidth > 1080) { closeMenu(); }
+      if (window.innerWidth > 1080) { setMenu(false, false); }
     });
 
     var navLinks = $$('.nav__link');
