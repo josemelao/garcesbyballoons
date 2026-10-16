@@ -631,7 +631,57 @@
     }
 
     /* -------------------------------------------------------------------
-       11. Impressão do FAQ (5.9)
+       11. FAQ: abre/fecha animado
+       O grid anima a abertura sozinho; ao fechar, mantemos o <details> {}
+       aberto até o fim da transição para que o colapso também seja suave.
+       ------------------------------------------------------------------- */
+    function cssTimeMs(value) {
+      if (!value) { return 0; }
+      var first = String(value).split(',')[0].trim();
+      return first.indexOf('ms') > -1 ? parseFloat(first) : parseFloat(first) * 1000;
+    }
+    function transitionMs(el) {
+      return el ? cssTimeMs(window.getComputedStyle(el).transitionDuration) : 0;
+    }
+
+    $$('details.faq').forEach(function (item) {
+      var summary = $('summary', item);
+      var body = $('.faq__body', item);
+      if (!summary || !body) { return; }
+
+      var closing = false;
+
+      function finishClose() {
+        closing = false;
+        item.open = false;
+        item.classList.remove('is-closing');
+        item.removeEventListener('transitionend', onEnd);
+      }
+
+      function onEnd(e) {
+        if (e.target !== body || e.propertyName !== 'grid-template-rows') { return; }
+        finishClose();
+      }
+
+      summary.addEventListener('click', function () {
+        /* abrir: deixa o comportamento nativo do <details> */
+        if (!item.open || closing) { return; }
+
+        closing = true;
+        item.classList.add('is-closing');
+
+        var ms = transitionMs(body);
+        if (ms > 20) {
+          item.addEventListener('transitionend', onEnd);
+          window.setTimeout(function () { if (closing) { finishClose(); } }, ms + 120);
+        } else {
+          finishClose();
+        }
+      });
+    });
+
+    /* -------------------------------------------------------------------
+       12. Impressão do FAQ (5.9)
        Abre os <details> fechados antes de imprimir e restaura depois.
        ------------------------------------------------------------------- */
     var openedForPrint = [];
@@ -646,7 +696,7 @@
     });
 
     /* -------------------------------------------------------------------
-       12. Reserva para imagens que não carregarem
+       13. Reserva para imagens que não carregarem
        ------------------------------------------------------------------- */
     $$('img').forEach(function (img) {
       img.addEventListener('error', function handleError() {

@@ -969,12 +969,21 @@ body.menu-open::before {
 }
 .faq[open] .faq__chevron { transform: rotate(180deg); }
 
+.faq__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-reveal) var(--ease-reveal);
+}
+.faq[open] .faq__body { grid-template-rows: 1fr; }
+.faq[open].is-closing .faq__body { grid-template-rows: 0fr; }
 .faq__a {
-  padding: 0 0 var(--sp-6);
+  overflow: hidden;
+  min-height: 0;
   max-width: 70ch;
   color: var(--text-muted);
   font-size: var(--fs-small);
 }
+.faq__a > :last-child { padding-bottom: var(--sp-6); }
 
 /* --------------------------------------------------------------------------
    16. Contato e formulário
