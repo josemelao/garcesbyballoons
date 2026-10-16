@@ -305,7 +305,7 @@ p { text-wrap: pretty; }
 .brand__name {
   font-family: var(--font-display);
   font-size: 1.18rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 .brand__tag {
@@ -858,6 +858,7 @@ body.menu-open::before {
 .signature {
   font-family: var(--font-display);
   font-style: italic;
+  font-weight: 600;
   font-size: 1.5rem;
   margin-top: var(--sp-8) !important;
   color: var(--cream-ink);
@@ -949,7 +950,7 @@ body.menu-open::before {
   list-style: none;
   font-family: var(--font-display);
   font-size: clamp(1.02rem, 1.6vw, 1.2rem);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text);
   transition: color var(--dur-hover) var(--ease-hover);
 }
