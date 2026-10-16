@@ -289,20 +289,94 @@
     var emptyMsg = $('#gallery-empty');
     var galleryStatus = $('#gallery-status');
 
+    function tileMatches(tile, value) {
+      return value === 'all' || tile.getAttribute('data-category') === value;
+    }
+
+    /* 5.11 — reflúxo animado (FLIP): as thumbnails deslizam até as novas
+       posições em vez de "pular"; quem sai desvanece, quem entra surge. */
+    function applyFilter(value) {
+      var count = 0;
+      tiles.forEach(function (tile) { if (tileMatches(tile, value)) { count++; } });
+
+      /* Movimento reduzido: troca instantânea, sem animação */
+      if (prefersReduced()) {
+        tiles.forEach(function (tile) { tile.hidden = !tileMatches(tile, value); });
+        return count;
+      }
+
+      var enterers = [];
+      var leavers = [];
+
+      /* First — posições atuais dos que ficam visíveis */
+      var first = [];
+      tiles.forEach(function (tile) {
+        var match = tileMatches(tile, value);
+        if (!tile.hidden && !match) { leavers.push(tile); }
+        if (tile.hidden && match) { enterers.push(tile); }
+        if (!tile.hidden && match) { first.push({ tile: tile, rect: tile.getBoundingClientRect() }); }
+      });
+
+      leavers.forEach(function (tile) { tile.classList.add('is-leaving'); });
+
+      function play() {
+        /* Aplica o novo estado */
+        leavers.forEach(function (tile) {
+          tile.hidden = true;
+          tile.classList.remove('is-leaving');
+        });
+        enterers.forEach(function (tile) {
+          tile.classList.add('is-entering');
+          tile.hidden = false;
+        });
+
+        /* Last + Invert — reposiciona os que continuam, antes de animar */
+        var flipped = [];
+        first.forEach(function (item) {
+          var now = item.tile.getBoundingClientRect();
+          var dx = item.rect.left - now.left;
+          var dy = item.rect.top - now.top;
+          if (!dx && !dy) { return; }
+          item.tile.style.transition = 'none';
+          item.tile.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+          flipped.push(item.tile);
+        });
+
+        /* Play */
+        requestAnimationFrame(function () {
+          flipped.forEach(function (tile) {
+            tile.style.transition = 'transform var(--dur-reveal) var(--ease-reveal)';
+            tile.style.transform = '';
+          });
+          enterers.forEach(function (tile) { tile.classList.add('is-entering--active'); });
+
+          window.setTimeout(function () {
+            flipped.forEach(function (tile) {
+              tile.style.transition = '';
+              tile.style.transform = '';
+            });
+            enterers.forEach(function (tile) {
+              tile.classList.remove('is-entering', 'is-entering--active');
+            });
+          }, 600);
+        });
+      }
+
+      if (leavers.length) { window.setTimeout(play, 160); }
+      else { play(); }
+
+      return count;
+    }
+
     filterButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
         var value = btn.getAttribute('data-filter');
-        var visible = 0;
 
         filterButtons.forEach(function (b) {
           b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
         });
 
-        tiles.forEach(function (tile) {
-          var match = value === 'all' || tile.getAttribute('data-category') === value;
-          tile.hidden = !match;
-          if (match) { visible++; }
-        });
+        var visible = applyFilter(value);
 
         if (emptyMsg) { emptyMsg.hidden = visible > 0; }
 
