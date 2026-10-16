@@ -1,0 +1,18 @@
+{
+  "name": "Garcês by Balloons",
+  "short_name": "Garcês",
+  "description": "Decoração de eventos com balões, consultoria e formação em Cidade Ocidental e Distrito Federal.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0C0A09",
+  "theme_color": "#0C0A09",
+  "icons": [
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

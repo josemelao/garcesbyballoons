@@ -631,7 +631,22 @@
     }
 
     /* -------------------------------------------------------------------
-       11. Reserva para imagens que não carregarem
+       11. Impressão do FAQ (5.9)
+       Abre os <details> fechados antes de imprimir e restaura depois.
+       ------------------------------------------------------------------- */
+    var openedForPrint = [];
+    window.addEventListener('beforeprint', function () {
+      $$('details.faq').forEach(function (d) {
+        if (!d.open) { d.open = true; openedForPrint.push(d); }
+      });
+    });
+    window.addEventListener('afterprint', function () {
+      openedForPrint.forEach(function (d) { d.open = false; });
+      openedForPrint = [];
+    });
+
+    /* -------------------------------------------------------------------
+       12. Reserva para imagens que não carregarem
        ------------------------------------------------------------------- */
     $$('img').forEach(function (img) {
       img.addEventListener('error', function handleError() {
