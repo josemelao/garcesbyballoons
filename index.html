@@ -9,18 +9,25 @@
 <meta name="author" content="Caleb Garcês">
 
 <!--
-  ⚠️ ANTES DE PUBLICAR: defina o domínio real e reative as tags abaixo.
-  canonical e og:url ficam desativados enquanto o endereço do site não
-  estiver definido — isso evita apontar para um domínio inventado.
-  <link rel="canonical" href="https://SEU-DOMINIO.com.br/">
-  <meta property="og:url" content="https://SEU-DOMINIO.com.br/">
+  ⚠️ TEMPLATE: troque "SEU-DOMINIO.com.br" pelo domínio real antes de publicar
+  (basta substituir todas as ocorrências). A og:image usa uma foto de referência;
+  troque pela foto real da marca (recomendado 1200×630).
 -->
+<link rel="canonical" href="https://SEU-DOMINIO.com.br/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Garcês by Balloons">
+<meta property="og:url" content="https://SEU-DOMINIO.com.br/">
 <meta property="og:title" content="Garcês by Balloons — Decoração com balões para eventos">
 <meta property="og:description" content="Decoração com balões, consultoria e workshops. Cidade Ocidental–GO, cidades próximas e Distrito Federal.">
+<meta property="og:image" content="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Composição de balões para evento — Garcês by Balloons">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Garcês by Balloons — Decoração com balões para eventos">
+<meta name="twitter:description" content="Decoração com balões, consultoria e workshops. Cidade Ocidental–GO, cidades próximas e Distrito Federal.">
+<meta name="twitter:image" content="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C0A09'/%3E%3Cpath d='M16 6c3.9 0 7 3.1 7 7 0 4.4-4.6 8.2-6.3 9.9a1 1 0 0 1-1.4 0C13.6 21.2 9 17.4 9 13c0-3.9 3.1-7 7-7Z' fill='none' stroke='%23D4AF37' stroke-width='1.6'/%3E%3Cpath d='M16 23v3' stroke='%23D4AF37' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E">
 
@@ -49,18 +56,31 @@
   });
 </script>
 
+<!--
+  Dados estruturados. TEMPLATE: revise "url", "telephone", "image" e "geo"
+  quando os dados reais forem definidos. O telefone abaixo é um valor de exemplo.
+-->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Garcês by Balloons",
   "description": "Decoração com balões para eventos, consultoria em decoração com balões e workshops (iniciantes e aperfeiçoamento).",
+  "url": "https://SEU-DOMINIO.com.br/",
+  "image": "https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630&fit=crop",
+  "telephone": "+5561900000000",
+  "priceRange": "$$",
   "founder": { "@type": "Person", "name": "Caleb Garcês" },
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Cidade Ocidental",
     "addressRegion": "GO",
     "addressCountry": "BR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -16.0836,
+    "longitude": -47.9336
   },
   "areaServed": [
     { "@type": "City", "name": "Cidade Ocidental" },
@@ -72,6 +92,63 @@
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Consultoria em decoração com balões" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workshop de decoração com balões para iniciantes" } },
     { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workshop de aperfeiçoamento em decoração com balões" } }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quais tipos de evento a Garcês by Balloons decora?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Aniversários, casamentos, inaugurações, festas e eventos corporativos — entre outras celebrações que peçam decoração com balões."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Vocês atendem fora de Cidade Ocidental?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. O atendimento cobre Cidade Ocidental–GO, as cidades próximas e o Distrito Federal. A disponibilidade para cada local é confirmada no orçamento."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como faço para pedir um orçamento?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pelo formulário da página ou pelo WhatsApp. Informe o tipo de evento, a data e a cidade para agilizar o retorno."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Nunca trabalhei com balões. Consigo fazer o workshop?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. Existe um workshop voltado para iniciantes, pensado justamente para quem está começando na decoração com balões."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Já trabalho na área. Existe algo para mim?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. O workshop de aperfeiçoamento é destinado a quem já decora com balões e quer evoluir em técnica e acabamento."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Posso contratar apenas a consultoria, sem a decoração?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. A consultoria em decoração com balões é um serviço independente, voltado a quem vai montar a própria decoração e quer orientação."
+      }
+    }
   ]
 }
 </script>
@@ -776,6 +853,8 @@
 
         <p class="form__note">
           Os dados informados são usados apenas para responder a esta solicitação.
+          Ao enviar, você concorda com a nossa
+          <a href="privacidade.html">Política de Privacidade</a>.
         </p>
       </form>
     </div>
@@ -856,6 +935,7 @@
     <div class="footer__bottom">
       <p>© <span id="year">2026</span> Garcês by Balloons. Todos os direitos reservados.</p>
       <div class="footer__legal">
+        <a href="privacidade.html">Política de Privacidade</a>
         <span>Cidade Ocidental – GO</span>
         <span>Caleb Garcês</span>
       </div>
