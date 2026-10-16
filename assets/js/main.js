@@ -360,12 +360,9 @@
         if (lastFocused) { lastFocused.focus(); }
       });
 
+      /* 5.8 — clicar no fundo do diálogo (backdrop) fecha o lightbox */
       lightbox.addEventListener('click', function (e) {
-        var rect = lightbox.getBoundingClientRect();
-        var inside =
-          e.clientX >= rect.left && e.clientX <= rect.right &&
-          e.clientY >= rect.top && e.clientY <= rect.bottom;
-        if (!inside) { closeLightbox(); }
+        if (e.target === lightbox) { closeLightbox(); }
       });
     }
 
