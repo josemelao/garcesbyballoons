@@ -549,6 +549,37 @@ body.menu-open::before {
 /* Card do grid de serviços: altura parecida independentemente do texto */
 .grid--4 > .card { justify-content: flex-start; }
 
+/* Depoimentos / prova social (Bloco 6) */
+.quotes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-4);
+}
+@media (max-width: 900px) { .quotes { grid-template-columns: 1fr; } }
+
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  height: 100%;
+  padding: var(--sp-8);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.quote__text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.quote__author {
+  margin-top: auto;
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 /* --------------------------------------------------------------------------
    10. Galeria
    -------------------------------------------------------------------------- */
