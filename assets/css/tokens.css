@@ -75,7 +75,7 @@
   --sp-24: 96px;
   --sp-32: 128px;
 
-  --section-y: clamp(64px, 9vw, 128px);
+  --section-y: clamp(48px, 6vw, 88px);
   --gutter:    clamp(20px, 5vw, 48px);
 
   /* --- Layout ------------------------------------------------------------ */

@@ -147,7 +147,7 @@ p { text-wrap: pretty; }
 
 .section-head {
   max-width: 760px;
-  margin-bottom: var(--sp-16);
+  margin-bottom: var(--sp-12);
 }
 .section-head--center {
   margin-inline: auto;
