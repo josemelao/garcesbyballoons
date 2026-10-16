@@ -692,6 +692,7 @@ body.menu-open::before {
 
 /* Lightbox */
 .lightbox {
+  margin: auto; /* restaura a centralização nativa do <dialog> (o reset * { margin: 0 } a remove) */
   padding: 0;
   border: 0;
   background: transparent;
@@ -938,6 +939,7 @@ body.menu-open::before {
    -------------------------------------------------------------------------- */
 .faq-list {
   max-width: 900px;
+  margin-inline: auto;
   border-top: 1px solid var(--border);
 }
 .faq { border-bottom: 1px solid var(--border); }
