@@ -102,9 +102,9 @@
     "semantic_hash": ""
   },
   "PLANO-LUXO.md": {
-    "mtime": 1792240424.89398,
-    "seen": 1792241825.0860224,
-    "ast_hash": "19f06515558dbff473906098552c12eb",
+    "mtime": 1792244011.429187,
+    "seen": 1792244038.1216063,
+    "ast_hash": "225a7a462ce2918d3355eb1937eda243",
     "semantic_hash": ""
   },
   "tests/hero-split.luxo.test.mjs": {

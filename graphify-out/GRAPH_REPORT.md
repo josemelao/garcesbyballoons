@@ -1,17 +1,17 @@
 # Graph Report - Balloons  (2026-10-17)
 
 ## Corpus Check
-- 19 files · ~31,677 words
+- 19 files · ~33,402 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 1, .css 1, .webmanifest 1)
 
 ## Summary
-- 191 nodes · 251 edges · 14 communities (12 shown, 2 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 19 edges (avg confidence: 0.89)
+- 191 nodes · 252 edges · 14 communities (12 shown, 2 thin omitted)
+- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 20 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b248cd4d`
+- Built from commit: `d96de457`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -31,7 +31,7 @@
 - form.block3.test.mjs
 
 ## God Nodes (most connected - your core abstractions)
-1. `main()` - 35 edges
+1. `main()` - 36 edges
 2. `Garcês by Balloons — Passada de Luxo · Plano de Implementação` - 18 edges
 3. `Plano de Ação v0 — Garcês by Balloons` - 16 edges
 4. `index.html — Garcês by Balloons Landing Page` - 8 edges
@@ -45,13 +45,13 @@
 ## Surprising Connections (you probably didn't know these)
 - `Bloco 3 — Movimento de entrada (reveals + split-text do H1)` --references--> `main()`  [INFERRED]
   PLANO-LUXO.md → assets/js/main.js
+- `Pendências conhecidas (minors deferidos)` --references--> `main()`  [INFERRED]
+  PLANO-LUXO.md → assets/js/main.js
 - `Insights do graphify que moldam o plano` --references--> `main()`  [INFERRED]
   planov0.md → assets/js/main.js
 - `PEV QA Agent (Phase 3: VERIFY)` --semantically_similar_to--> `Accessibility and Performance Practices`  [INFERRED] [semantically similar]
   .opencode/agents/pev/qa.md → README.md
 - `Bloco 4 — Header & menu (P0/P1)` --references--> `goToContactForm()`  [INFERRED]
-  planov0.md → assets/js/main.js
-- `Bloco 4 — Header & menu (P0/P1)` --references--> `closeMenu()`  [INFERRED]
   planov0.md → assets/js/main.js
 
 ## Import Cycles
@@ -114,7 +114,7 @@ Nodes (7): boot(), configJs, here, html, mainJs, makeDom(), root
 
 ## Knowledge Gaps
 - **3 isolated node(s):** `JSON-LD LocalBusiness Structured Data`, `Missing LGPD / Privacy Policy Link`, `PEV Slash Command (/pev)`
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 108 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 107 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
@@ -122,14 +122,14 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `main()` connect `main` to `Plano de Ação v0 — Garcês by Balloons`, `Garcês by Balloons — Passada de Luxo · Plano de Implementação`?**
   _High betweenness centrality (0.128) - this node is a cross-community bridge._
-- **Are the 4 inferred relationships involving `main()` (e.g. with `closeLightbox()` and `onEnd()`) actually correct?**
-  _`main()` has 4 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 5 inferred relationships involving `main()` (e.g. with `closeLightbox()` and `onEnd()`) actually correct?**
+  _`main()` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `JSON-LD LocalBusiness Structured Data`, `Missing LGPD / Privacy Policy Link`, `PEV Slash Command (/pev)` to the rest of the system?**
   _3 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `main` be split into smaller, more focused modules?**
   _Cohesion score 0.07827260458839407 - nodes in this community are weakly interconnected._
-- **Why does `Bloco 3 — Movimento de entrada (reveals + split-text do H1)` connect `Garcês by Balloons — Passada de Luxo · Plano de Implementação` to `main`?**
-  _High betweenness centrality (0.063) - this node is a cross-community bridge._
+- **Why does `jsdom` connect `package.json` to `lightbox-abertura.luxo.test.mjs`, `spotlight-cards.luxo.test.mjs`, `hero-split.luxo.test.mjs`, `magnetic-buttons.luxo.test.mjs`, `hero-parallax.luxo.test.mjs`, `form.block3.test.mjs`?**
+  _High betweenness centrality (0.060) - this node is a cross-community bridge._
 - **Should `Plano de Ação v0 — Garcês by Balloons` be split into smaller, more focused modules?**
   _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
 - **Should `Garcês by Balloons — Passada de Luxo · Plano de Implementação` be split into smaller, more focused modules?**
