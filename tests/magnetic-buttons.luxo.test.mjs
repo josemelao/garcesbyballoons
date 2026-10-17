@@ -1,13 +1,14 @@
 /* ==========================================================================
    Luxo / Bloco 9 — botões magnéticos (item 2 do bloco opcional)
 
-   O botão acompanha o ponteiro por no máximo 6px. As invariantes que este
+   O botão acompanha o ponteiro por no máximo 4px. As invariantes que este
    teste protege:
 
    1. o deslocamento é PUBLICADO em `--mag-x`/`--mag-y` (o CSS compõe no
       transform do botão; escrever `style.transform` daqui apagaria o CSS,
       como o Bloco 8 aprendeu no hero);
-   2. o deslocamento satura em 6px (o botão nunca "foge" do clique);
+   2. o deslocamento satura em 4px (o botão nunca "foge" do clique; o teto
+      nasceu em 6px e caiu para 4px no gate visual do Bloco 9);
    3. no centro do botão, deslocamento zero;
    4. ao sair (`pointerleave`) as variáveis somem — o botão volta ao lugar;
    5. só liga em ponteiro fino com hover; touch não recebe listener;

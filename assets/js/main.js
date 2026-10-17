@@ -382,7 +382,11 @@
 
       img.addEventListener('load', markLoaded, { once: true });
       img.addEventListener('error', markLoaded, { once: true });
-      /* rede de segurança: a máscara nunca pode deixar a imagem escondida */
+      /* rede de segurança: a máscara nunca pode deixar a imagem escondida.
+         Ela é um piso, não um atalho: se a decodificação passar de 1,2s, a
+         máscara abre antes dos pixels (o .is-visible do reveal continua
+         valendo, então nada vaza antes da hora). Sem esta rede, uma imagem
+         lenta ficaria com a máscara fechada para sempre. */
       window.setTimeout(markLoaded, 1200);
     });
 
