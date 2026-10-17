@@ -384,6 +384,37 @@
     });
 
     /* -------------------------------------------------------------------
+       6d. Spotlight dos cards (#servicos, #formacao, #como-funciona)
+       O glow do hover é CSS; o JS só move a luz para debaixo do cursor
+       escrevendo --mx/--my (px, relativos ao card). Uma escrita por quadro,
+       em ponteiro fino e sem movimento reduzido — em touch não há listener.
+       ------------------------------------------------------------------- */
+    var spotlightTargets = $$('.card, .service, .service--feature, .program');
+
+    if (spotlightTargets.length && !prefersReduced() &&
+        window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      spotlightTargets.forEach(function (card) {
+        var agendado = false;
+        var px = 0;
+        var py = 0;
+
+        card.addEventListener('pointermove', function (event) {
+          px = event.clientX;
+          py = event.clientY;
+          if (agendado) { return; }
+          agendado = true;
+
+          requestAnimationFrame(function () {
+            agendado = false;
+            var caixa = card.getBoundingClientRect();
+            card.style.setProperty('--mx', (px - caixa.left) + 'px');
+            card.style.setProperty('--my', (py - caixa.top) + 'px');
+          });
+        }, { passive: true });
+      });
+    }
+
+    /* -------------------------------------------------------------------
        7. Galeria: filtros
        ------------------------------------------------------------------- */
     var tiles = $$('#gallery .tile');

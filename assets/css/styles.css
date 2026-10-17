@@ -121,7 +121,7 @@ body::after {
 }
 
 .section { padding-block: var(--section-y); }
-.section--soft { background: var(--bg-soft); border-top: 1px solid var(--border); }
+.section--soft { background: var(--bg-soft); }
 
 .section--dark {
   background:
@@ -134,6 +134,21 @@ body::after {
   color: var(--cream-ink);
 }
 .band-light h1, .band-light h2, .band-light h3 { color: var(--cream-ink); }
+
+/* Bloco 6 — costura entre faixas: 1px em gradiente (some nas pontas) no topo
+   das faixas claras. Substitui a borda cinza chapada da .section--soft: a
+   passagem escuro → claro ganha um fio de ouro em vez de um corte duro. */
+.section--soft,
+.band-light { position: relative; }
+.section--soft::before,
+.band-light::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  pointer-events: none;
+}
 
 /* Utilitários de espaçamento (evitam estilos inline) */
 .u-mt-5 { margin-top: var(--sp-5); }
@@ -367,9 +382,13 @@ body::after {
   min-height: var(--nav-h);
   display: flex;
   align-items: center;
-  background: rgba(12, 10, 9, 0.72);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  /* Bloco 6: a barra entra no idioma do vidro fumê (.55 + blur 16 + saturate
+     140% + fio de luz no topo) — sem a classe .glass, para não brigar com o
+     estado rolado (.94) nem com o painel do menu mobile. */
+  background: rgba(12, 10, 9, 0.55);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid transparent;
   transition: border-color var(--dur-hover) var(--ease-hover),
               background-color var(--dur-hover) var(--ease-hover);
@@ -686,6 +705,9 @@ body.menu-open::before {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  /* Bloco 6: contexto próprio para o glow (::after) ficar acima do fundo do
+     card e abaixo do texto, como o ::before do .btn no Bloco 4 */
+  isolation: isolate;
   transition:
     transform var(--dur-hover) var(--ease-hover),
     background-color var(--dur-hover) var(--ease-hover),
@@ -695,9 +717,11 @@ body.menu-open::before {
 .card:hover {
   transform: translateY(-4px);
   background: var(--surface-2);
-  border-color: var(--border-gold);
+  border-color: var(--border-gold-strong);
   box-shadow: var(--shadow-md);
 }
+/* teclado recebe a mesma pele do hover (sem o lift: quem navega não é o mouse) */
+.card:focus-within { border-color: var(--border-gold-strong); }
 .card__icon {
   width: 46px; height: 46px;
   display: grid;
@@ -736,11 +760,20 @@ body.menu-open::before {
   flex-direction: column;
   overflow: hidden;
   padding: var(--sp-8);
-  border: 1px solid var(--border-gold-strong);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background:
-    radial-gradient(520px 320px at 50% 0%, rgba(212, 175, 55, 0.12), transparent 70%),
-    var(--surface);
+  background: var(--surface);
+  isolation: isolate;
+  transition: background-color var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
+}
+/* Bloco 6 (adendo) — o card destacado de #servicos fica IGUAL aos outros em
+   repouso; a pele featured (borda ouro forte + glow + hairline) aparece no
+   hover/:focus-within. A verticalidade e o respiro continuam sendo layout. */
+.service--feature:hover,
+.service--feature:focus-within {
+  background: var(--surface-2);
+  border-color: var(--border-gold-strong);
 }
 .service--feature::before {
   content: "";
@@ -748,7 +781,11 @@ body.menu-open::before {
   inset: 0 0 auto;
   height: 2px;
   background: linear-gradient(90deg, var(--gold), rgba(212, 175, 55, 0));
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-hover);
 }
+.service--feature:hover::before,
+.service--feature:focus-within::before { opacity: 1; }
 .service--feature .card__icon { margin-bottom: 0; }
 
 .service__tag {
@@ -779,9 +816,9 @@ body.menu-open::before {
   text-transform: uppercase;
   color: var(--gold);
 }
-.service__link svg { transition: transform var(--dur-hover) var(--ease-hover); }
+/* Bloco 6: o deslize do ícone saiu (minor deferido do Bloco 4, reavaliado
+   aqui) — o Bloco 4 já havia removido todo movimento de ícone dos botões. */
 .service__link:hover { color: var(--gold-light); }
-.service__link:hover svg { transform: translateX(4px); }
 
 .services__list {
   display: grid;
@@ -791,6 +828,7 @@ body.menu-open::before {
 @media (max-width: 900px) { .services__list { grid-template-rows: none; } }
 
 .service {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--sp-5);
@@ -798,11 +836,13 @@ body.menu-open::before {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
+  isolation: isolate;
   transition:
     background-color var(--dur-hover) var(--ease-hover),
     border-color var(--dur-hover) var(--ease-hover);
 }
-.service:hover { background: var(--surface-2); border-color: var(--border-gold); }
+.service:hover,
+.service:focus-within { background: var(--surface-2); border-color: var(--border-gold-strong); }
 .service__index {
   flex: none;
   font-family: var(--font-display);
@@ -1090,22 +1130,22 @@ body.menu-open::before {
 @media (max-width: 620px) { .programs { grid-template-columns: 1fr; } }
 
 .program {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: var(--sp-8);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface);
+  isolation: isolate;
   transition: background-color var(--dur-hover) var(--ease-hover),
               border-color var(--dur-hover) var(--ease-hover);
 }
-.program:hover { background: var(--surface-2); border-color: var(--border-gold); }
-.program--featured {
-  border-color: var(--border-gold-strong);
-  background:
-    radial-gradient(420px 220px at 50% 0%, rgba(212, 175, 55, 0.12), transparent 70%),
-    var(--surface);
-}
+/* Bloco 6: a pele featured de #formacao também passou a existir só no hover —
+   e, com uma única regra para todos, o antigo quirk (`.program:hover` de 0,2,0
+   apagando `.program--featured` de 0,1,0) deixou de existir por construção. */
+.program:hover,
+.program:focus-within { background: var(--surface-2); border-color: var(--border-gold-strong); }
 .program__tag {
   font-size: var(--fs-label);
   letter-spacing: 0.16em;
@@ -1167,12 +1207,14 @@ body.menu-open::before {
   left: var(--sp-6);
   bottom: var(--sp-6);
   padding: var(--sp-3) var(--sp-5);
-  background: rgba(12, 10, 9, 0.88);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-gold-strong);
   border-radius: var(--radius);
   color: var(--text);
 }
+/* Bloco 6: a superfície do badge é o utilitário .glass (mesma linguagem da
+   barra do header). A borda ouro forte é própria do badge e vence o
+   `border: 1px solid transparent` do .glass pela especificidade, sem depender
+   da ordem em que os dois aparecem no arquivo. */
+.about__badge.glass { border-color: var(--border-gold-strong); }
 .about__badge strong { display: block; font-family: var(--font-display); font-size: 1.05rem; }
 .about__badge span {
   font-size: var(--fs-label);
@@ -1743,6 +1785,57 @@ body.menu-open::before {
 .legal__back { margin-top: var(--sp-16); }
 
 /* --------------------------------------------------------------------------
+   19c. Bloco 6 — vidro fumê e pele featured no hover
+   -------------------------------------------------------------------------- */
+
+/* Vidro fumê. Entra só onde há fundo rico por baixo (hoje, o badge do Sobre):
+   é o único ponto em que um `backdrop-filter` a mais compra alguma coisa sem
+   somar jank (Review Focus #1). A barra do header usa o mesmo idioma por
+   declaração própria, na seção 7. */
+.glass {
+  background: rgba(12, 10, 9, 0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--shadow-md);
+}
+/* Sem backdrop-filter o vidro vira opaco: melhor sólido e legível do que um
+   retângulo translúcido com texto por cima da imagem crua. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: rgba(12, 10, 9, 0.92); }
+}
+
+/* Pele featured no hover — UMA camada de glow por card, atrás do texto
+   (`z-index: -1` + `isolation: isolate` no card, como o ::before do .btn do
+   Bloco 4). Em #servicos, #formacao e #como-funciona todos os cards ficam
+   idênticos em repouso; a hierarquia aparece no hover/:focus-within. O glow
+   segue o cursor nos três (--mx/--my, passo 6d do main.js); sem ponteiro
+   (teclado) fica no topo, que é o default das variáveis. */
+.card::after,
+.service::after,
+.service--feature::after,
+.program::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(520px 320px at var(--mx, 50%) var(--my, 0%), rgba(212, 175, 55, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur-hover) var(--ease-hover);
+}
+.card:hover::after,
+.card:focus-within::after,
+.service:hover::after,
+.service:focus-within::after,
+.service--feature:hover::after,
+.service--feature:focus-within::after,
+.program:hover::after,
+.program:focus-within::after { opacity: 1; }
+
+/* --------------------------------------------------------------------------
    20. Movimento reduzido
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
@@ -1795,4 +1888,7 @@ body.menu-open::before {
   /* Bloco 4: o sublinhado desenhado é um background e não imprime — devolve o
      text-decoration para o link seguir identificável no papel */
   .section-cta a { text-decoration: underline; }
+  /* Bloco 6: o fundo do badge não imprime; sem isto o texto claro cairia
+     invisível sobre o papel branco */
+  .about__badge { background: none; color: #000; border-color: #000; }
 }
