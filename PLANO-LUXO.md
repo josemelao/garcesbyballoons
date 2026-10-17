@@ -32,10 +32,14 @@
 | 8. Hero: Ken Burns perpétuo **só no desktop** (≥900px) + parallax por variável + slot de vídeo comentado | `cfe034c` | ✅ aprovado |
 | 9. Botões magnéticos (item 2 do bloco opcional; itens 1, 3 e 4 **descartados**) | `a7f73c1` | ✅ aprovado |
 | — (documentação da suíte de testes) | `b19b1db` | — |
+| R. Revisão global — correções do revisor (I1 descendentes do H1 · I2 alpha do badge) | `e8eab1b` | ✅ verificado no navegador |
+| R. Revisão global — comentários dos minors (M1, M3) | `407b612` | — |
+
+**Revisão global (17/10):** revisor de contexto fresco sobre `a64c4cd..b248cd4` — **0 críticos, 2 importantes** (ambos corrigidos em `e8eab1b`), 3 minors (M1/M2/M3) e **1 defeito pré-existente fora do escopo** (o menu mobile, ver pendências). Os 6 itens do Review Focus foram conferidos por mim em navegador headless (Chrome via CDP), não só por leitura.
 
 **Testes:** `npm test` → **48/48** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs` + 3 em `tests/hero-parallax.luxo.test.mjs` + 5 em `tests/magnetic-buttons.luxo.test.mjs`).
 
-**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23, bloco8 25/25, bloco9 23/23 - verificam a presença/forma das regras, os fallbacks e as contas de contraste. **11 contratos, 0 falhas.**
+**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 16/16, bloco1b 25/25, bloco2 18/18, bloco3 23/23, bloco4 63/63, bloco5 54/54, bloco6 54/54, bloco7 23/23, bloco8 25/25, bloco9 23/23 - verificam a presença/forma das regras, os fallbacks e as contas de contraste. **10 contratos, 324 checagens, 0 falhas.** Dois deles cresceram na revisão global: o do Bloco 3 passou a checar a *relação* entre a folga vertical da máscara e a subida do keyframe (era o número solto que abençoava o corte do ç e do q) e o do Bloco 6 passou a ler o alpha do badge no CSS e a medir o span dourado (antes só o texto claro era medido, e sobre um token chapado em vez do fundo composto).
 
 ### Decisões tomadas durante a execução (divergências do plano)
 
@@ -101,6 +105,10 @@
 - **Commits dos Blocos 4 a 9 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido); o do 9 foi `77e2d77` → `a7f73c1` (magnético mais discreto). Segue um commit por bloco; as versões antigas ficam no reflog.
 - **Sem revisão de contexto fresco por bloco** (Blocos 5, 6 e 7): em execução inline o revisor único é o da branch inteira, na "Revisão global" do plano, depois do Bloco 9.
 - **Commits dos Blocos 4, 5 e 6 amendados** quando o gate pediu mudança antes de aprovar (`00aa182` → `e003f97` no Bloco 6): a constraint é 1 commit por bloco, e as versões antigas ficam no reflog.
+- **A revisão global achou 2 defeitos importantes — e os dois eram meus** (17/10, corrigidos em `e8eab1b`). **(I1)** A máscara do split-text cortava a tinta **na vertical**: o `.word` já tinha folga horizontal para o itálico, mas nenhuma vertical, e com `--lh-tight` (1.08) a caixa da palavra mede 1.08em contra um ascent+descent de ~1,33em da Playfair — o ç de "Decoração" e o q de "que" perdiam ~4 a 5px de tinta nos **três** viewports. A folga (`padding-block: 0.13em` + `margin-block: -0.13em`) é o espelho exato do hack horizontal, e como o `margin-block` encolhe a caixa de margem na mesma medida a tinta **não se move**: no Chrome, a altura do H1 (362,88px), o passo entre linhas (90,72px = o token `--lh-tight`) e a posição x das 10 palavras ficam idênticos ao estado anterior, ao décimo de pixel; só o recorte da máscara cresce (90,72 → 112,53px). O keyframe subiu de 110% para 130% porque com a caixa maior o `translateY(110%)` deixaria ~12px de ascendente aparecendo no quadro inicial. Contraprova (tinta medida em pixel, máscara aberta × fechada na mesma página): as duas palavras passam de **−4,34 / −4,62px** (1440), **−1,86 / −0,96** (768) e **−1,95 / −1,76** (375) — ou seja, cortadas — para **+6,58 / +6,30**, **+4,63 / +5,53** e **+3,25 / +3,44**. *(O `cenário` dourado nunca esteve cortado; o alerta que eu levantei sobre ele era erro do meu próprio modelo de baseline no `<em>`, não do CSS.)*
+- **Os contratos deixaram passar o corte durante 9 blocos** (17/10): o do Bloco 3 exigia as folgas **horizontais** e o `translateY(110%)` **literal** — a forma, não a tinta. Passou a checar a **relação** (folga ≥ 0,12em com `padding-block` = `−margin-block`; subida > `1em + 2×folga`). O do Bloco 6 recebeu o mesmo remédio: passou a **ler** o alpha do badge no CSS e a medir o **span dourado** (antes só media o texto claro, e sobre um token chapado em vez do fundo composto real).
+- **O alpha do badge do Sobre voltou a ser próprio** (17/10, `e8eab1b`, achado **I2**): o Bloco 6 levou o badge para o `.glass` compartilhado (alpha .55) e o span dourado de 12px ficou em **4,20:1** no ponto mais claro do vidro — abaixo dos 4,5:1 de texto normal. O que muda entre a barra e o badge é o que existe **atrás**: o header fica sobre o scrim do hero (brilho limitado), o badge sobre uma **foto crua** (brilho arbitrário). Alpha próprio de **.78**, só sob `@supports (backdrop-filter…)`, para o fallback opaco (.92) do utilitário seguir valendo. Garantia: .78 dá **4,92:1 até contra branco puro** — logo, contra *qualquer* foto; nos pixels que o revisor mediu, ~**7,5:1** (era 4,20:1).
+- **A revisão global não rendeu nenhum achado crítico** (17/10): o revisor tentou quebrar o hero (parallax × Ken Burns), a cadeia reveal/máscara, o caminho sem JS, o reduced-motion e o contrato de overflow horizontal — e não conseguiu. O que ele registra como forte é o que os blocos construíram de propósito: reduced-motion completo **com** rede global (`animation-duration: .01ms` pega o `spin` que a lista explícita esqueceu); todo esconderijo escopado em `.js`; máscara que espera os pixels decodificados; split-text que preserva o `<em>`; e contraste **calculado**, com fallbacks reais de `@media print` e `forced-colors`.
 
 ### Pendências conhecidas (minors deferidos)
 
@@ -125,12 +133,15 @@
 - **O botão magnético persegue o ponteiro em vez de colar nele** (Bloco 9): a transição de `--dur-magnet` (160ms) vale para os dois sentidos, então durante a perseguição o botão fica um pouco atrás do cursor — é o que dá o ar "fluido". Se um dia incomodar, zerar a transição **durante** a perseguição (uma classe `.is-magnet` que zera só a `duration` do transform) e manter os 160ms só na volta.
 - **O gate `(hover: hover) and (pointer: fine)` é avaliado uma vez, no boot** (Bloco 9, igual ao spotlight do Bloco 6 e ao parallax do Bloco 8): num híbrido, trocar de dedo para mouse com a página aberta não liga/desliga o efeito até recarregar. Custo de resolver: um listener de `matchMedia` por feature — não se paga.
 - **O teto de 6px do magnético agora é checado pelo contrato** (Bloco 9): a checagem trava "o limite segue pequeno (≥1px e ≤6px)", para uma afinação futura não transformar o CTA num botão que escapa do clique.
+- **O MENU MOBILE É INALCANÇÁVEL EM TELAS ≤ ~432px** — defeito **pré-existente**, fora do escopo desta branch, achado pela revisão global (17/10) e o único item de classe crítica do produto. Com `max-width: 1080px` o `.nav__links` sai e o `.nav__toggle` entra, mas o CTA `Solicitar orçamento` (`.btn--gold`) continua na barra: em 375px o `.nav__actions` ocupa x 186,6 → **431,9px**, o toggle (44×44) fica inteiro fora da viewport, `elementFromPoint(390…430, 220)` devolve `null` e o `overflow-x: hidden` do `body` impede rolar até ele — quem chega pelo celular não abre o menu. Medido **idêntico** no `main` e na branch (o `a64c4cd` foi extraído numa árvore separada e as medidas batem byte a byte): a branch **não causou nem consertou**. O passo 2 do gate ("arraste até ~375px") não pegou porque o excesso é recortado, não aparece como barra de rolagem. Correção provável (1 linha): esconder o CTA abaixo de ~560px — ele já existe dentro do painel aberto, via `.nav__cta` — ou deixar a barra quebrar em duas linhas. **Precisa de decisão do humano; se for para esta branch, é commit próprio.**
 
 ### Próximo passo
 
 **Bloco 9 — Extras opcionais.** *(**Fechado**: commit `a7f73c1`, aprovado no gate visual de 17/10 com o item 2 — botões magnéticos — e os itens 1, 3 e 4 descartados com racional.)*
 
-**Revisão global (depois do último bloco aprovado).** *É o que vem agora: `npm test`, os 6 itens do Review Focus, a varredura de reduced-motion, o fallback sem JS, `graphify update .` — e o **revisor de contexto fresco** sobre o diff da branch inteira, o único da branch (cada bloco rodou sem um).*
+**Revisão global (depois do último bloco aprovado).** *(**Concluída em 17/10**: `npm test`, os 6 itens do Review Focus, a varredura de reduced-motion, o fallback sem JS, `graphify update .` e o **revisor de contexto fresco** sobre o diff da branch inteira — o único da branch, já que cada bloco rodou sem um. Veredito: 0 críticos, 2 importantes (corrigidos em `e8eab1b`), 3 minors (em `407b612` + emenda do plano). Ver a seção "Revisão global" no fim.)*
+
+**Próximo passo.** *A **passada final de navegador** do humano (itens 2 e 4 do gate: ~375px sem barra horizontal, reduced-motion, JS desligado — e o olho no H1 e no badge do Sobre, que mudaram) e, depois, **fechar a branch**: PR ou merge, escolha do humano. Fica em aberto a decisão sobre o defeito pré-existente do menu mobile em telas estreitas.*
 
 ---
 
@@ -147,7 +158,7 @@
 ## Global Constraints
 
 - **Zero dependências novas** de runtime. Não adicionar `node_modules` ao site nem CDNs. GSAP é proibido fora do Bloco 9 (opcional).
-- **Só animar `transform` e `opacity`** (e `background-position` apenas onde explicitamente indicado). Nunca animar `width/height/top/left/filter`.
+- **Só animar `transform` e `opacity`** (e `background-position` apenas onde explicitamente indicado). Nunca animar `width/height/top/left/filter`. *(Emenda da revisão global, minor M2: a redação original não previa as exceções de **pintura** que blocos aprovados já usavam — `background-size` no sublinhado dos `.section-cta a` (Bloco 4, porque são links inline que quebram em duas linhas), `clip-path` na máscara das imagens (Bloco 3/5) e as trocas de `color`/`border-color`/`background-color`/`box-shadow`. Nenhuma delas move layout, todas são de 1px ou de cor, e **nenhuma das quatro proibidas** é animada — o que o contrato verifica por varredura.)*
 - **`prefers-reduced-motion: reduce`** → todo movimento para em estado final legível (congelar, não esconder).
 - **Fallback sem JS:** o conteúdo nunca pode ficar invisível se `main.js` falhar (o padrão atual de remover `.js` deve ser mantido).
 - **Contraste:** texto normal ≥ 4.5:1, texto grande/negrito ≥ 3:1, contra o fundo composto real. O gradiente dourado não pode derrubar título abaixo de 3:1.
@@ -580,8 +591,12 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 
 ## Revisão global (depois do último bloco aprovado)
 
-- [ ] Rodar `npm test` (verde).
-- [ ] Passar por todo o **Review Focus** (6 itens do topo).
-- [ ] Verificar `prefers-reduced-motion` em todas as animações novas.
-- [ ] Verificar fallback sem JS em cada bloco.
-- [ ] Rodar `graphify update .` (conforme `AGENTS.md`) após mexer no código.
+Rodada em 17/10 sobre `a64c4cd..b248cd4` (18 commits, 10 arquivos, +2314/−83).
+
+- [x] Rodar `npm test` → **48/48** (6 arquivos).
+- [x] Passar por todo o **Review Focus** (6 itens do topo) → conferidos por leitura **e** por medição em navegador headless (Chrome via CDP); nenhum sobreviveu. **#1** jank de vidro: 2 superfícies no documento, 1 em tela (o custo por quadro não é medível em render de software — fica como ressalva declarada). **#2** contraste: foi daqui que saiu o achado I2. **#3** movimento perpétuo: cai para `animation-name: none` em reduced-motion. **#4** overflow horizontal: `scrollWidth == clientWidth` em 768/1440, `scrollLeftMax = 0` e `--mag-x/--mag-y` a 4px não estouram nada. **#5** reveal falhando: 0 escondidos sem JS. **#6** conflito de `transform`: wrapper × imagem, sem briga.
+- [x] Verificar `prefers-reduced-motion` em todas as animações novas → **medido no navegador**: só o `form__spinner` sobrevive (neutralizado a `1e-05s / 1 iteração` pela rede global); `kb`, `gold-sheen`, `aura-drift` e `word-up` → `none`; 0 revelados escondidos e máscara aberta.
+- [x] Verificar fallback sem JS em cada bloco → **medido no navegador com os scripts bloqueados**: sem a classe `.js`, **0 de 24** `[data-reveal]` escondidos, H1 com opacidade 1 e o texto do HTML (0 `.word`), imagem do hero visível.
+- [x] Rodar `graphify update .` (conforme `AGENTS.md`) após mexer no código → 191 nós / 251 arestas.
+- [x] **Revisor de contexto fresco** sobre o diff da branch inteira — o único da branch (cada bloco rodou sem um): **0 críticos, 2 importantes, 3 minors**, mais 1 defeito pré-existente fora do escopo. Os 2 importantes foram corrigidos em `e8eab1b` (ver o log de divergências) e os minors em `407b612` + a emenda desta seção. O pré-existente é o menu mobile (ver pendências) e é decisão do humano.
+- [ ] **Passada final de navegador do humano:** janela larga e ~375px sem barra horizontal; reduced-motion ligado (página parada e legível); JavaScript desabilitado (nada invisível) — e **olhar especificamente o H1** (o ç de "Decoração" e o q de "que" voltaram a ter tinta) **e o badge do Sobre** (o vidro ficou mais escuro para o dourado passar de 4,5:1).
