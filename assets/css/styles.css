@@ -212,10 +212,35 @@ body::after {
 }
 .section-cta a {
   color: var(--gold);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  /* Bloco 4: sublinhado "desenhado" em duas camadas. A camada de repouso
+     (ouro a 55% = 3,49:1 no escuro, medido no contrato) mantém o link
+     identificável sem depender só da cor — WCAG 1.4.1 em link inline no meio
+     de uma frase; a camada clara se desenha da esquerda para a direita no
+     hover. background-size (e não transform) porque o link é inline e pode
+     quebrar em duas linhas: um ::after com scaleX cobriria só o primeiro
+     fragmento. */
+  background-image:
+    linear-gradient(var(--gold-light), var(--gold-light)),
+    linear-gradient(rgba(212, 175, 55, 0.55), rgba(212, 175, 55, 0.55));
+  background-repeat: no-repeat;
+  background-position: left bottom, left bottom;
+  background-size: 0% 1px, 100% 1px;
+  padding-bottom: 3px;
+  transition:
+    background-size 0.3s var(--ease-cinema),
+    color var(--dur-hover) var(--ease-hover);
 }
-.section-cta a:hover { color: var(--gold-light); }
+.section-cta a:hover {
+  color: var(--gold-light);
+  background-size: 100% 1px, 100% 1px;
+}
+/* Bloco 4: em cores forçadas o navegador anula background-image de gradiente e
+   o sublinhado desenhado desaparece — o link voltaria a ser distinguível só
+   pela cor (WCAG 1.4.1). Devolve o sublinhado real, como no fallback de
+   impressão. Mesmo padrão do Bloco 1. */
+@media (forced-colors: active) {
+  .section-cta a { text-decoration: underline; }
+}
 
 /* --------------------------------------------------------------------------
    5. Botões
@@ -224,6 +249,13 @@ body::after {
   --btn-bg: transparent;
   --btn-fg: var(--text);
   --btn-bd: var(--border-gold-strong);
+  /* Bloco 4 (revisão): a cor que "preenche" o botão da esquerda para a direita
+     no hover. Cada variante escolhe o tom em função da cor do próprio rótulo,
+     para que o texto nunca caia no meio da varredura (ver .btn--ghost). */
+  --btn-fill: transparent;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -239,46 +271,68 @@ body::after {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
+  /* sem transform: o botão não se move mais no hover — só o preenchimento */
   transition:
-    transform var(--dur-hover) var(--ease-hover),
     background-color var(--dur-hover) var(--ease-hover),
     border-color var(--dur-hover) var(--ease-hover),
     box-shadow var(--dur-hover) var(--ease-hover),
     color var(--dur-hover) var(--ease-hover);
 }
+/* Bloco 4 (revisado): o ícone NÃO se move mais. O deslize de 3px saiu a pedido
+   do humano — pegava também o glifo do WhatsApp, que fica à ESQUERDA do
+   rótulo, e qualquer coisa andando no hover incomodava. Sobra só o
+   flex: none, que impede o svg de encolher dentro do flex. */
 .btn svg { flex: none; }
 
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
+/* Bloco 4 (revisão): preenchimento da esquerda para a direita. Camada só de
+   transform (scaleX) atrás do rótulo — o isolation garante que o z-index -1
+   pinte acima do fundo do botão e abaixo do texto. Sem lustro branco. */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-fill);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease-cinema), opacity var(--dur-icon) var(--ease-hover);
+  pointer-events: none;
+}
+.btn:hover::before { transform: scaleX(1); }
+/* feedback de pressão sem mexer no rótulo: nenhum transform */
+.btn:active::before { opacity: 0.88; }
 
 .btn--gold {
   --btn-bg: var(--gold);
   --btn-fg: var(--on-gold);
   --btn-bd: var(--gold);
+  /* preenche com o ouro claro: o texto escuro segue legível em todo o trajeto */
+  --btn-fill: var(--gold-light);
 }
+/* O fundo base NÃO muda no hover: quem clareia é a varredura, da esquerda para
+   a direita. Trocar --btn-bg aqui faria a pílula inteira acender de uma vez e
+   apagaria o efeito. A sombra dourada caiu à metade (menos brilho). */
 .btn--gold:hover {
-  --btn-bg: var(--gold-light);
   --btn-bd: var(--gold-light);
-  box-shadow: var(--shadow-gold);
+  box-shadow: 0 12px 28px rgba(212, 175, 55, 0.1);
 }
 
-.btn--ghost:hover {
-  --btn-bd: var(--gold);
-  --btn-fg: var(--gold);
-  background: var(--gold-wash);
-}
+.btn--ghost { --btn-fill: var(--gold-deep); }
+/* Preenche com o ouro fundo, não com o ouro cheio: o rótulo claro permanece
+   sobre ele (--text × --gold-deep = 4,55:1, medido no contrato). Se o
+   preenchimento fosse --gold, o texto teria de escurecer no meio da varredura
+   e ficaria ilegível sobre a parte ainda não preenchida. */
+.btn--ghost:hover { --btn-bd: var(--gold-deep); }
 
 .btn--sm { min-height: 40px; padding: var(--sp-2) var(--sp-5); font-size: 0.72rem; }
 
 .band-light .btn--ghost {
   --btn-fg: var(--cream-ink);
   --btn-bd: rgba(28, 25, 23, 0.22);
+  /* em fundo claro o preenchimento é o ouro claro e o texto continua escuro */
+  --btn-fill: var(--gold-light);
 }
-.band-light .btn--ghost:hover {
-  --btn-fg: var(--gold-on-cream);
-  --btn-bd: var(--gold-on-cream);
-  background: rgba(161, 98, 7, 0.08);
-}
+.band-light .btn--ghost:hover { --btn-bd: var(--gold-light); }
 
 /* --------------------------------------------------------------------------
    6. Aviso de pré-visualização
@@ -1665,6 +1719,7 @@ body.menu-open::before {
   .socials a:hover,
   .socials button:hover { transform: none; }
 
+  /* Bloco 4: o botão não levanta e o preenchimento congela no estado final */
   .tile:hover img { transform: none; }
 
   .js .hero__media { transform: none; will-change: auto; }
@@ -1684,4 +1739,7 @@ body.menu-open::before {
     color: #000;
   }
   .faq__body { grid-template-rows: 1fr !important; }
+  /* Bloco 4: o sublinhado desenhado é um background e não imprime — devolve o
+     text-decoration para o link seguir identificável no papel */
+  .section-cta a { text-decoration: underline; }
 }
