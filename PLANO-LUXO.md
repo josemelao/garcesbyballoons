@@ -12,9 +12,9 @@
 
 ---
 
-## Status de execução (atualizado em 16/10/2026)
+## Status de execução (atualizado em 17/10/2026)
 
-**Branch:** `feat/luxo` · **Blocos 0 a 6 executados e com gate visual aprovado pelo humano.**
+**Branch:** `feat/luxo` · **Blocos 0 a 7 executados e com gate visual aprovado pelo humano.**
 
 | Bloco | Commit | Estado |
 | --- | --- | --- |
@@ -28,11 +28,12 @@
 | 4. Botões e links (micro-interações) | `7ec317f` | ✅ aprovado |
 | 5. Galeria e lightbox (abertura sem animação, por decisão do gate) | `aab0aea` | ✅ aprovado |
 | 6. Cards, superfícies e vidro fumê (+ adendo "featured no hover"; spotlight seguindo o cursor nas 3 seções) | `e003f97` | ✅ aprovado |
+| 7. Depoimentos editoriais (respiro e full-bleed **reprovados e revertidos no gate**; marquee e avatar descartados antes) | `21451e2` | ✅ aprovado |
 | — (documentação da suíte de testes) | `b19b1db` | — |
 
-**Testes:** `npm test` → **39/39** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 10 novos em `tests/spotlight-cards.luxo.test.mjs`).
+**Testes:** `npm test` → **40/40** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs`).
 
-**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52 - verificam a presença/forma das regras, os fallbacks e as contas de contraste.
+**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23 - verificam a presença/forma das regras, os fallbacks e as contas de contraste.
 
 ### Decisões tomadas durante a execução (divergências do plano)
 
@@ -76,7 +77,17 @@
 - **O `.glass` testa os DOIS prefixos de `backdrop-filter`** no `@supports` (Bloco 6) — o snippet testava só o padrão, e header e badge declaram os dois.
 - **Fallback de impressão do badge** (Bloco 6): o fundo escuro não imprime e o texto é claro (`--text`); sem `.about__badge { background: none; color: #000 }` ele sumiria no papel. Defeito **pré-existente** que o bloco herdou ao virar dono daquela superfície.
 - **Spotlight também em `#formacao` e `#servicos`** (Bloco 6, pedido no gate): o CSS já lia `--mx/--my` nos quatro tipos; faltava o **listener**, que estava preso em `$$('.card')` — e `.card` só existe em `#como-funciona`. Uma linha de seletor, zero CSS novo.
-- **Sem revisão de contexto fresco por bloco** (Blocos 5 e 6): em execução inline o revisor único é o da branch inteira, na "Revisão global" do plano, depois do Bloco 9.
+- **O respiro maior do Bloco 7 foi reprovado no gate** (17/10): `--section-y` voltou ao valor do Bloco 2 (`clamp(48px, 6vw, 88px)`). No desktop o termo em `vw` satura no teto, então o que parecia grande era o **máximo** (128px contra 88px) — voltar ao histórico `64px` manteria os mesmos 128px exatamente onde o humano olhou. `tokens.css` acabou saindo do commit do bloco.
+- **A faixa full-bleed foi REMOVIDA no gate** (17/10), depois de o humano perguntar se era prática comum/necessária: é prática comum em página editorial, mas aqui repetia imagem que o visitante já tinha visto na galeria e, plantada logo acima do CTA, competia com ele. Saíram o `figure.bleed`, as duas regras CSS e a linha de `@media print` — o `index.html` saiu do commit. O snippet do plano (`width:100vw; margin-inline: calc(50% - 50vw)`) também tinha o defeito clássico: se um dia a faixa voltar, o certo é filho direto de `<main>` com `width: 100%`, sem `100vw` (que estoura com a barra de rolagem e sai cortado). O plano a colocava entre `#galeria` e `#formacao`; na execução foi para `#depoimentos`/`#contato`, antes de cair.
+- **O marquee (Step 4) nunca foi implementado** — virou ruling: movimento perpétuo mais texto duplicado para o leitor de tela, num site que já lista os tipos de evento na galeria. O contrato trava a ausência.
+- **Sem avatar nos depoimentos** (o Step 3 dizia "opcional"): não se inventa identidade para depoimento anônimo; o valor está na frase, não no rosto.
+- **As aspas grandes moram no `.quote::before`, em bloco** (não absolutas): nunca cobrem o texto nem dependem do padding do card; e como o `::after` virou o glow compartilhado do Bloco 6, o `::before` era o único pseudo livre. O par inline do `.quote__text::before/::after` (`“ ”`) saiu — o `<blockquote>` já é semântico.
+- **O vão entre as aspas e o texto foi apertado no gate** (17/10): o vão visual era ~47px, não os 24px que o CSS sugeria — 20px do `gap` + 4px de margem + ~23px de **caixa morta** (com `line-height: .75` a caixa tem 39px, mas a tinta da aspa pende do topo e ocupa só ~16px dela). Agora `height: 0.35em` na pseudo (a caixa termina logo abaixo da tinta) e sem margem: ~22px.
+- **A assinatura do depoimento ganhou um fio dourado acima** (`border-top` + `padding-top`): hierarquia editorial, escolha minha — não estava no plano.
+- **`.quote` entrou no idioma do Bloco 6 e no spotlight do cursor**: glow + borda ouro + `--surface-2` no hover, com `position: relative` explícito (sem ele o `::after` resolveria contra o `.section--soft`, que ganhou `position: relative` no Bloco 6). Consequência: a lista de seletores travada pelo contrato do Bloco 6 foi **estendida** com `.quote::after` — mesmo precedente do Bloco 6 rev 1 (o contrato registra um snapshot; a extensão entra por ruling, sem afrouxar nenhuma checagem existente).
+- **O contrato do Bloco 7 nasceu RED-first e foi invertido no gate**: das 31 checagens escritas para o pacote original, 9 eram da faixa full-bleed e viraram 1 de **ausência** ("SEM bleed em CSS/HTML/JS"), ao lado de "SEM marquee" e "SEM avatar" — ruling vira checagem para não se perder num refactor. Terminou com **23 checagens**.
+- **Commits dos Blocos 4 a 7 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido). Segue um commit por bloco; as versões antigas ficam no reflog.
+- **Sem revisão de contexto fresco por bloco** (Blocos 5, 6 e 7): em execução inline o revisor único é o da branch inteira, na "Revisão global" do plano, depois do Bloco 9.
 - **Commits dos Blocos 4, 5 e 6 amendados** quando o gate pediu mudança antes de aprovar (`00aa182` → `e003f97` no Bloco 6): a constraint é 1 commit por bloco, e as versões antigas ficam no reflog.
 
 ### Pendências conhecidas (minors deferidos)
@@ -92,9 +103,13 @@
 - **No fantasma preenchido o contraste fica em 4,55:1** — passa, mas por 0,05. Só reprovaria se `--text` ou `--gold-deep` mudassem.
 - **O selo "Ampliar" pode encostar num nome de tile muito longo** em larguras estreitas (o selo é absoluto no canto inferior direito e o nome cresce da esquerda). Nos 8 nomes atuais há folga; se entrar um nome longo, é só encurtar o selo ou subir o nome.
 
+- **As aspas decorativas do depoimento ficam em 2,28:1 no hover** (Bloco 7): o glifo em `--gold` a `opacity: .5` dá 3,04:1 sobre `--surface` (o repouso) e 2,28:1 sobre `--surface-2`, que é o fundo **no hover**. É texto grande **puramente decorativo** — isento por WCAG 1.4.3 ("pure decoration"): a informação está no `<blockquote>` e o glifo é enfeite tipográfico. Se quiser mais presença, `opacity: .65` dá 3,09:1 também no hover (1 linha).
+- **O `height: 0.35em` das aspas depende da métrica da Playfair Display**: com fonte de fallback a folga entre a tinta e o texto pode variar um pouco. Nunca sobrepõe o texto (o `gap` do flex segue em 20px); ajuste fino é um `margin-bottom` negativo na pseudo.
+- **Se a faixa full-bleed voltar um dia**, ela precisa de uma foto: o par `37803981` que eu havia escolhido (a mesma sessão do tile "Decoração externa com balões") ficou órfão — não está em lugar nenhum do site agora, e o contrato do Bloco 7 trava a **ausência** de qualquer `.bleed`.
+
 ### Próximo bloco
 
-**Bloco 7 — Layout editorial (respiro, full-bleed, depoimentos, marquee).** *(O Bloco 6 está commitado em `e003f97` e **aprovado** pelo gate visual — "tudo validado até então", 16/10.)*
+**Bloco 8 — Hero: Ken Burns + slot de vídeo.** *(O Bloco 7 está commitado em `21451e2` e **aprovado** pelo gate visual — "aprovado", 17/10 — depois de o respiro maior e a faixa full-bleed caírem no gate; o bloco fechou com os depoimentos editoriais.)*
 
 ---
 
@@ -460,26 +475,27 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 
 ## Bloco 7 — Layout editorial (respiro, full-bleed, depoimentos, marquee)
 
-**Objetivo:** dar "revista de luxo" — mais espaço, uma quebra full-bleed, depoimentos editoriais e (opcional) um marquee.
+**Objetivo:** dar "revista de luxo" — mais espaço, uma quebra full-bleed, depoimentos editoriais e (opcional) um marquee. → **Sobreviveu só a parte de depoimentos:** o respiro maior e a faixa full-bleed foram reprovados no gate (17/10) e o marquee e o avatar já tinham sido descartados como ruling antes de escrever código.
 
-**Arquivos:**
-- Modify: `assets/css/tokens.css` (`--section-y`)
-- Modify: `assets/css/styles.css` (`#depoimentos`, nova seção full-bleed, `.marquee`)
-- Modify: `index.html` (nova seção `.bleed` entre `#galeria` e `#formacao`; marquee opcional)
+**Arquivos (o que de fato mudou):**
+- Modify: `assets/css/styles.css` (`#depoimentos` editorial + `.quote` no glow compartilhado do Bloco 6)
+- Modify: `assets/js/main.js` (1 linha: `.quote` no alvo do spotlight)
+- Modify: `tests/spotlight-cards.luxo.test.mjs` (+1 teste de comportamento)
+- **Não** modificados no resultado final: `tokens.css` (o `--section-y` voltou ao valor anterior) e `index.html` (a faixa full-bleed saiu no gate).
 
 **Interfaces:**
-- Consumes: tokens do Bloco 0.
-- Produces: `.bleed`, `.marquee`.
+- Consumes: tokens do Bloco 0; o glow compartilhado do Bloco 6.
+- Produces: nada que outro bloco consuma — `.bleed` e `.marquee` não existem.
 
-- [ ] **Step 1:** Reverter o respiro para mais generoso: `--section-y: clamp(72px, 9vw, 128px);` (validar; foi reduzido no último commit remoto).
-- [ ] **Step 2:** Seção full-bleed com uma imagem (parallax leve, opcional) ocupando a largura total — usar um `<figure class="bleed">` com `width:100vw; margin-inline: calc(50% - 50vw)`.
-- [ ] **Step 3:** Depoimentos editoriais: aspas grandes decorativas, mais respiro, avatar opcional, stagger do Bloco 3.
-- [ ] **Step 4 (opcional):** marquee lento de tipos de evento (pausável no hover/focus; estático em reduced-motion).
-- [ ] **Step 5 (validação):** conferir ritmo vertical e overflow.
+- [ ] **Step 1 (REVERTIDO no gate, 17/10):** o respiro mais generoso (`--section-y: clamp(72px, 9vw, 128px)`) foi aplicado, medido e **reprovado pelo humano** ("volte, ficou grande"); o token voltou para `clamp(48px, 6vw, 88px)`, o valor do Bloco 2. Lição registrada: no desktop o termo em `vw` satura no teto, então o que se vê é o **máximo** — reduzir o mínimo não muda nada na tela grande.
+- [ ] **Step 2 (REVERTIDO no gate, 17/10):** a faixa full-bleed foi implementada (filho direto de `<main>`, `width: 100%`, foto decorativa com `alt` vazio, reveal, `display: none` na impressão) e **removida** depois que o humano perguntou se era necessária: ela repetia imagem que o visitante já viu na galeria e, logo acima do CTA, competia com o formulário. O snippet que o plano trazia (`100vw` + `margin-inline`) também era um defeito: estoura com a barra de rolagem clássica. **Se voltar, usar `width: 100%` como filho de `<main>`.**
+- [x] **Step 3:** Depoimentos editoriais — aspas grandes decorativas no `.quote::before` (em bloco, não absolutas; o `::after` é o glow do Bloco 6), mais respiro (`gap` de `--sp-4` para `--sp-6`), fio dourado acima da assinatura e o card inteiro no idioma de hover do Bloco 6 (glow + borda ouro + `--surface-2`), com o **`.quote` também no spotlight do cursor**. **Avatar: não** (ruling — não se inventa identidade para depoimento anônimo). O par inline `“ ”` do `.quote__text` saiu. O vão entre as aspas e o texto foi apertado no gate (`height: 0.35em` na pseudo, sem margem: ~47px → ~22px).
+- [ ] **Step 4 (descartado como ruling, antes do código):** marquee de tipos de evento — movimento perpétuo mais texto duplicado para o leitor de tela, num site que já lista os tipos de evento nos filtros da galeria. O contrato do bloco trava a **ausência**.
+- [x] **Step 5 (validação):** ritmo vertical e overflow conferidos; **sem** nenhuma mudança de `tokens.css`/`index.html` no resultado final. — **✅ aprovado pelo humano em 17/10** ("aprovado"), depois das três correções do gate.
 
-**Validação visual (gate):** a página "respira"; a quebra full-bleed cria pausa dramática.
+**Validação visual (gate):** a página "respira"; a quebra full-bleed cria pausa dramática. → **O gate inverteu o bloco:** o respiro foi considerado exagerado e a faixa, dispensável (ver decisões no topo). O que ficou em pé foram os **depoimentos editoriais** — aspas grandes encostadas no texto, fio na assinatura e o card com a pele de hover do Bloco 6, inclusive seguindo o cursor. — **✅ aprovado pelo humano em 17/10.** Números medidos: assinatura muted sobre `--surface-2` no hover 6,01:1; texto do depoimento sobre o glow no pior ponto 4,73:1; aspas decorativas 3,04:1 em repouso (2,28:1 no hover — decorativo, isento por WCAG 1.4.3).
 
-**Commit:** `feat(ux): layout editorial com respiro, full-bleed e depoimentos`
+**Commit:** `feat(ux): depoimentos editoriais` → em ASCII, pela convenção do repo: `21451e2 feat(ux): depoimentos editoriais` *(amendado duas vezes no gate: `398aae2` → `c2bf3ce` com o respiro revertido e as aspas apertadas → `21451e2` com a faixa removida; as versões antigas ficam no reflog)*.
 
 ---
 
