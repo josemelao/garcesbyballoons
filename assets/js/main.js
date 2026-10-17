@@ -273,6 +273,48 @@
     }
 
     /* -------------------------------------------------------------------
+       6a. Split-text do H1 (palavra por palavra)
+       Roda só quando há JS e não há movimento reduzido, e preserva o markup
+       inline (o <em> do ouro metálico). O H1 nunca depende disso para
+       aparecer: sem JS ele fica exatamente como está no HTML.
+       ------------------------------------------------------------------- */
+    var heroTitle = $('.hero__title');
+
+    if (heroTitle && !prefersReduced() && !heroTitle.querySelector('.word')) {
+      var wordIndex = 0;
+      var splitFrag = document.createDocumentFragment();
+
+      Array.prototype.slice.call(heroTitle.childNodes).forEach(function (child) {
+        var isElement = child.nodeType === 1;
+        var parts = isElement ? [null] : child.textContent.split(/\s+/);
+
+        parts.forEach(function (part) {
+          if (part === '') { return; }
+
+          var word = document.createElement('span');
+          word.className = 'word';
+          word.style.setProperty('--i', String(wordIndex));
+          wordIndex += 1;
+
+          var inner = document.createElement('span');
+          inner.className = 'word__inner';
+          if (isElement) {
+            inner.appendChild(child); /* <em>cenário</em> entra como uma "palavra" */
+          } else {
+            inner.appendChild(document.createTextNode(part));
+          }
+
+          word.appendChild(inner);
+          splitFrag.appendChild(word);
+          splitFrag.appendChild(document.createTextNode(' '));
+        });
+      });
+
+      while (heroTitle.firstChild) { heroTitle.removeChild(heroTitle.firstChild); }
+      heroTitle.appendChild(splitFrag);
+    }
+
+    /* -------------------------------------------------------------------
        6. Reveal on scroll
        ------------------------------------------------------------------- */
     var revealTargets = $$('[data-reveal], [data-reveal-group]');

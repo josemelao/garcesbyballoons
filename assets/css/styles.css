@@ -1517,8 +1517,8 @@ body.menu-open::before {
    -------------------------------------------------------------------------- */
 .js [data-reveal] {
   transition:
-    opacity var(--dur-reveal) var(--ease-reveal),
-    transform var(--dur-reveal) var(--ease-reveal);
+    opacity var(--dur-reveal-lg) var(--ease-cinema),
+    transform var(--dur-reveal-lg) var(--ease-cinema);
 }
 .js [data-reveal]:not(.is-visible) {
   opacity: 0;
@@ -1527,12 +1527,49 @@ body.menu-open::before {
 
 .js [data-reveal-group]:not(.is-visible) > * { opacity: 0; }
 .js [data-reveal-group].is-visible > * {
-  animation: reveal-up var(--dur-reveal) var(--ease-reveal) backwards;
+  animation: reveal-up var(--dur-reveal-lg) var(--ease-cinema) backwards;
 }
 
 @keyframes reveal-up {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
+}
+
+/* Reveal com máscara: a imagem é descoberta de baixo para cima */
+@keyframes media-unveil {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0); }
+}
+.js .hero__media { animation: media-unveil var(--dur-reveal-lg) var(--ease-cinema) both; }
+
+.js .about__media img {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-reveal-lg) var(--ease-cinema);
+}
+.js .about__media.is-visible img { clip-path: inset(0); }
+
+/* Split-text do H1: cada palavra sobe mascarada. O elemento .word só existe
+   quando o JS roda, então sem JS o H1 fica exatamente como está no HTML. */
+.word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  /* respiro para o itálico do <em> (cenário) não ser cortado pela máscara;
+     o negativo devolve o espaçamento original entre as palavras */
+  padding-inline: 0.06em;
+  margin-inline: -0.06em;
+}
+.word__inner {
+  display: inline-block;
+  animation: word-up 0.8s var(--ease-cinema) both;
+  animation-delay: calc(var(--i, 0) * var(--dur-stagger));
+}
+@keyframes word-up {
+  from { transform: translateY(110%); }
+  to   { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .word__inner { transform: none; animation: none; }
 }
 
 /* stagger: passo único (token), no máximo 8 filhos com atraso real */
