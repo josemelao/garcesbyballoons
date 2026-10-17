@@ -516,6 +516,21 @@ body::after {
   .nav__actions { gap: var(--sp-2); }
 }
 
+/* 5.6 — o menu mobile era INALCANÇÁVEL em celular (revisão global, 17/10).
+   Com marca + CTA dourado + botão de menu, o `.nav__inner` pedia ~434px: em
+   qualquer viewport menor que isso o botão (44×44) ficava inteiro fora da tela
+   e o `overflow-x: hidden` do body impedia rolar até ele — medido no Chrome,
+   `elementFromPoint` no centro do botão devolvia `null` (o menu não abria por
+   toque). O estouro é recortado, então não aparecia como barra de rolagem no
+   gate. Mesmo padrão que o `.btn--ghost` (WhatsApp) já usa em ≤1080px: no
+   celular o CTA deixa a barra e vive no painel do menu, onde já existia (o
+   `.nav__cta`, que só aparece com o menu aberto) — nenhuma ação se perde e o
+   texto do HTML não muda. 560px é o breakpoint de "celular" do projeto
+   (galeria de 1 coluna, badge full-width). */
+@media (max-width: 560px) {
+  .nav__actions .btn--gold { display: none; }
+}
+
 /* 5.5 — menu mobile aberto: bloqueia o scroll e escurece o fundo */
 body.menu-open { overflow: hidden; }
 body.menu-open::before {
