@@ -96,7 +96,7 @@ test('3.4 · o JS aplica novalidate quando assume o formulário', () => {
 
 /* ------------------------------------------------------------------ 3.7 */
 
-test('3.7 · submit inválido revela resumo no topo, focado e anunciado', () => {
+test('3.7 · submit inválido marca os campos e mostra mensagem geral', () => {
   const dom = boot();
   const { window } = dom;
   const doc = window.document;
@@ -104,31 +104,24 @@ test('3.7 · submit inválido revela resumo no topo, focado e anunciado', () => 
 
   submit(window, form);
 
-  const summary = doc.getElementById('form-summary');
-  assert.ok(summary, 'deve existir um resumo de erro #form-summary');
-  assert.equal(summary.getAttribute('role'), 'alert', 'resumo deve ter role="alert"');
-  assert.equal(summary.hasAttribute('hidden'), false, 'resumo deve ficar visível após erro');
-  assert.equal(summary.getAttribute('tabindex'), '-1', 'resumo deve ser focável por script');
-  assert.equal(doc.activeElement, summary, 'o foco deve ir para o container do resumo');
-
-  const firstField = doc.querySelector('#contact-form .field');
-  assert.ok(
-    summary.compareDocumentPosition(firstField) & FOLLOWING,
-    'o resumo deve vir antes dos campos (no topo do formulário)'
-  );
+  const status = doc.getElementById('form-status');
+  assert.ok(status, 'deve existir um status #form-status');
+  assert.equal(status.getAttribute('role'), 'status', 'status deve ter role="status"');
+  assert.equal(status.getAttribute('aria-live'), 'polite', 'status deve ser polite');
+  assert.ok(status.className.includes('form__status--error'), 'status de erro deve aparecer');
+  assert.ok(status.className.includes('is-visible'), 'status deve estar visível');
+  assert.match(status.textContent, /Complete os campos destacados/, 'mensagem geral deve aparecer');
 
   for (const name of ['nome', 'telefone', 'data-evento', 'cidade', 'servico', 'mensagem']) {
-    assert.ok(summary.querySelector(`a[href="#${name}"]`), `resumo deve linkar o campo ${name}`);
+    const field = doc.getElementById(name).closest('.field');
+    assert.ok(field.classList.contains('has-error'), 'campo ' + name + ' deve ter borda vermelha');
+    assert.equal(doc.getElementById(name).getAttribute('aria-invalid'), 'true', 'campo ' + name + ' deve ter aria-invalid');
   }
 
-  assert.equal(
-    doc.getElementById('nome').getAttribute('aria-invalid'), 'true',
-    'os erros inline devem continuar'
-  );
   dom.window.close();
 });
 
-test('3.7 · submit válido esconde o resumo e usa status polite', async () => {
+test('3.7 · submit válido usa status polite (sem erro)', async () => {
   const dom = boot({ config: { formEndpoint: 'https://example.test/endpoint' } });
   const { window } = dom;
   const doc = window.document;
@@ -143,10 +136,6 @@ test('3.7 · submit válido esconde o resumo e usa status polite', async () => {
 
   submit(window, form);
   await flush();
-
-  const summary = doc.getElementById('form-summary');
-  assert.ok(summary, 'deve existir #form-summary');
-  assert.equal(summary.hasAttribute('hidden'), true, 'resumo deve ficar escondido sem erros');
 
   const status = doc.getElementById('form-status');
   assert.equal(status.getAttribute('role'), 'status');

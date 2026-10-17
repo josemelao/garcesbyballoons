@@ -1612,22 +1612,6 @@ body.menu-open::before {
 }
 .form__status svg { flex: none; margin-top: 2px; }
 
-/* Resumo de erro no topo do formulário (item 3.7) */
-.form__summary {
-  margin: 0 0 var(--sp-5);
-  padding: var(--sp-4) var(--sp-5);
-  border-radius: var(--radius);
-  font-size: var(--fs-small);
-  background: var(--error-bg);
-  border: 1px solid rgba(248, 113, 113, 0.35);
-  color: var(--error);
-}
-.form__summary[hidden] { display: none; }
-.form__summary:focus-visible { outline: 2px solid var(--error); outline-offset: 2px; }
-.form__summary-title { margin: 0; font-weight: 600; }
-.form__summary-list { margin: var(--sp-3) 0 0; padding-left: 1.15rem; display: grid; gap: 0.25rem; }
-.form__summary-list a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-
 .form__note { margin-top: var(--sp-5); font-size: 0.8rem; color: var(--text-muted); }
 .form__actions { margin-top: var(--sp-6); display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: center; }
 /* a mensagem de erro vive ao lado do botao (ou abaixo, no mobile, via wrap) */

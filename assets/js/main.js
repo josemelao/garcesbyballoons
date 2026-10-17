@@ -650,7 +650,6 @@
       var submitBtn = $('#form-submit');
       var submitLabel = $('#form-submit-label');
       var statusBox = $('#form-status');
-      var summaryBox = $('#form-summary');
 
       var rules = {
         nome: function (v) {
@@ -690,8 +689,6 @@
         var input = form.elements[name];
         return input ? input.closest('.field') : null;
       }
-
-      function errorOf(name) { return doc.getElementById(name + '-error'); }
 
       function validateField(name) {
         var input = form.elements[name];
@@ -751,41 +748,11 @@
         statusBox.textContent = '';
       }
 
-      /* 3.7 — Resumo de erro no topo do formulário (focável, role="alert"),
-         com link para cada campo inválido. Os erros inline são mantidos. */
+      /* fieldLabel: usado na mensagem geral de erro (lista os campos inválidos) */
       function fieldLabel(name) {
         var label = doc.querySelector('label[for="' + name + '"]');
         var text = label ? label.textContent.replace(/\s*\*\s*$/, '').trim() : name;
         return text || name;
-      }
-
-      function showSummary(invalid) {
-        if (!summaryBox) { return; }
-        var items = invalid.map(function (name) {
-          return '<li><a href="#' + name + '">' + fieldLabel(name) + '</a></li>';
-        }).join('');
-        summaryBox.innerHTML =
-          '<p class="form__summary-title">Confira ' +
-          (invalid.length > 1 ? 'os campos destacados' : 'o campo destacado') +
-          ' para continuar:</p>' +
-          '<ul class="form__summary-list">' + items + '</ul>';
-        summaryBox.hidden = false;
-        summaryBox.focus();
-      }
-
-      function hideSummary() {
-        if (!summaryBox) { return; }
-        summaryBox.hidden = true;
-        summaryBox.textContent = '';
-      }
-
-      if (summaryBox) {
-        summaryBox.addEventListener('click', function (e) {
-          var link = e.target.closest ? e.target.closest('a[href^="#"]') : null;
-          if (!link) { return; }
-          var target = doc.getElementById(link.getAttribute('href').slice(1));
-          if (target) { e.preventDefault(); target.focus(); }
-        });
       }
 
       function setLoading(loading) {
@@ -825,24 +792,21 @@
         Object.keys(rules).forEach(function (name) {
           var f = fieldOf(name);
           if (f) { f.classList.remove('has-error'); }
-          var err = errorOf(name);
-          if (err) { err.textContent = ''; }
         });
-        hideSummary();
+        /* o status de sucesso NÃO é limpo aqui — ele fica visível depois do
+           envio. Só o clearStatus() do submit (no início) limpa o status. */
       }
 
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         clearStatus();
-        hideSummary();
 
         var invalid = validateAll();
         if (invalid.length) {
-          /* mensagem geral ao lado do botao (visao) + resumo no topo com links
-             (leitor de tela) — o mesmo array alimenta os dois */
+          /* mensagem geral ao lado do botao (visao) — sem resumo no topo, que
+             era redundante com esta mensagem */
           setStatus('error', ICON_ALERT,
             'Complete os campos destacados: ' + invalid.map(fieldLabel).join(', ') + '.');
-          showSummary(invalid);
           return;
         }
 
