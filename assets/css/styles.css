@@ -286,12 +286,17 @@ body::after {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
-  /* sem transform: o botão não se move mais no hover — só o preenchimento */
+  /* Bloco 4 (revisão): sem transform ESPONTÂNEO — o botão não se move sozinho no
+     hover; quem preenche é a varredura. O único deslocamento que existe é o
+     magnético do Bloco 9, dirigido pelo cursor (--mag-x/--mag-y, publicados pelo
+     JS): é a reabertura explícita do ruling do Bloco 4, aprovada em 17/10. */
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
   transition:
     background-color var(--dur-hover) var(--ease-hover),
     border-color var(--dur-hover) var(--ease-hover),
     box-shadow var(--dur-hover) var(--ease-hover),
-    color var(--dur-hover) var(--ease-hover);
+    color var(--dur-hover) var(--ease-hover),
+    transform var(--dur-magnet) var(--ease-hover);
 }
 /* Bloco 4 (revisado): o ícone NÃO se move mais. O deslize de 3px saiu a pedido
    do humano — pegava também o glifo do WhatsApp, que fica à ESQUERDA do
@@ -1955,4 +1960,7 @@ body.menu-open::before {
   /* Bloco 6: o fundo do badge não imprime; sem isto o texto claro cairia
      invisível sobre o papel branco */
   .about__badge { background: none; color: #000; border-color: #000; }
+  /* Bloco 9: o deslocamento magnético não pode sobrar no papel (basta o
+     ponteiro ter parado no botão antes do Ctrl+P) */
+  .btn { transform: none; }
 }

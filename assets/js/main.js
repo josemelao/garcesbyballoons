@@ -967,6 +967,58 @@
         img.src = FALLBACK_IMG;
       });
     });
+
+    /* -------------------------------------------------------------------
+       14. Botões magnéticos (Bloco 9)
+       O botão acompanha o ponteiro por no máximo MAG_MAX px — pequeno de
+       propósito: o CTA é o elemento de conversão e o botão não pode "fugir"
+       do clique. O JS só publica --mag-x/--mag-y (px, medidos do centro do
+       botão) e o CSS compõe no transform; nunca `style.transform`, que
+       apagaria o que o CSS decide (lição do Bloco 8 no hero).
+       Uma escrita por quadro, só em ponteiro fino com hover, desligado em
+       movimento reduzido — em touch não há listener nenhum.
+       ------------------------------------------------------------------- */
+    var MAG_MAX = 4;
+    var botoesMagneticos = $$('.btn');
+
+    if (botoesMagneticos.length && !prefersReduced() &&
+        window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      botoesMagneticos.forEach(function (botao) {
+        var agendado = false;
+        var dentro = false;
+        var px = 0;
+        var py = 0;
+
+        botao.addEventListener('pointermove', function (event) {
+          px = event.clientX;
+          py = event.clientY;
+          dentro = true;
+          if (agendado) { return; }
+          agendado = true;
+
+          requestAnimationFrame(function () {
+            agendado = false;
+            /* saiu antes do quadro: não escreve atrasado por cima da volta */
+            if (!dentro) { return; }
+            var caixa = botao.getBoundingClientRect();
+            var meiaLargura = caixa.width / 2 || 1;
+            var meiaAltura = caixa.height / 2 || 1;
+            var dx = (px - (caixa.left + meiaLargura)) / meiaLargura * MAG_MAX;
+            var dy = (py - (caixa.top + meiaAltura)) / meiaAltura * MAG_MAX;
+            dx = Math.max(-MAG_MAX, Math.min(MAG_MAX, dx));
+            dy = Math.max(-MAG_MAX, Math.min(MAG_MAX, dy));
+            botao.style.setProperty('--mag-x', dx.toFixed(2) + 'px');
+            botao.style.setProperty('--mag-y', dy.toFixed(2) + 'px');
+          });
+        }, { passive: true });
+
+        botao.addEventListener('pointerleave', function () {
+          dentro = false;
+          botao.style.removeProperty('--mag-x');
+          botao.style.removeProperty('--mag-y');
+        }, { passive: true });
+      });
+    }
   }
 
   try {

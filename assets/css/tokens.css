@@ -104,6 +104,12 @@
   --ease-soft:   cubic-bezier(0.65, 0, 0.35, 1);
   --dur-reveal-lg: 760ms;
   --dur-icon:      220ms;
+  /* Bloco 9 (botões magnéticos): o tempo da volta do botão ao lugar. Também é
+     o tempo com que ele persegue o ponteiro. Gate 17/10: o humano pediu MAIS
+     DISCRETO, então a volta é rápida (o botão não fica passeando) e o
+     deslocamento máximo caiu de 6px para 4px — metade do deslocamento que o
+     magnético tinha, e o mesmo do deslize de ícone que o Bloco 4 cortou. */
+  --dur-magnet:    160ms;
 
   /* --- Ouro metálico ----------------------------------------------------- */
   --gold-hi:    #F3E1A3;
