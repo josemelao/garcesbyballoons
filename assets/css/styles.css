@@ -934,23 +934,70 @@ body.menu-open::before {
   transition: opacity var(--dur-reveal) var(--ease-reveal),
               transform var(--dur-reveal) var(--ease-reveal);
 }
+/* Bloco 5: hover "premium" do tile — a imagem respira, o rótulo sobe e o ouro
+   varre a base. O antigo `filter` na transition violava a constraint "nunca
+   animar filter": a saturação agora troca na hora. */
 .tile img {
   width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform var(--dur-slow) var(--ease-reveal), filter var(--dur-slow) var(--ease-reveal);
+  transition: transform var(--dur-slow) var(--ease-cinema);
   filter: saturate(0.88);
 }
-.tile:hover img { transform: scale(1.04); filter: saturate(1); }
+.tile:hover img { transform: scale(1.06); filter: saturate(1); }
 
 .tile__overlay {
   position: absolute;
-  inset: auto 0 0 0;
+  /* 4px abaixo do fundo: no hover o rótulo sobe 4px e o bloco pousa exatamente
+     na base do tile, sem abrir uma fresta clara embaixo (o overflow do .tile
+     recorta o excesso, que cai na parte opaca do gradiente). */
+  inset: auto 0 -4px 0;
   display: flex;
   flex-direction: column;
   gap: var(--sp-1);
   padding: var(--sp-8) var(--sp-5) var(--sp-5);
   background: linear-gradient(180deg, transparent 0%, rgba(12, 10, 9, 0.75) 30%, rgba(12, 10, 9, 0.93) 60%, rgba(12, 10, 9, 0.97) 100%);
+  opacity: 0.94;
+  transform: translateY(4px);
+  transition: transform var(--dur-slow) var(--ease-cinema), opacity var(--dur-slow) var(--ease-cinema);
 }
+.tile:hover .tile__overlay,
+.tile:focus-visible .tile__overlay { opacity: 1; transform: none; }
+
+/* Hairline dourada que varre a base no hover (só transform) */
+.tile::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-cinema);
+  pointer-events: none;
+}
+.tile:hover::after,
+.tile:focus-visible::after { transform: scaleX(1); }
+
+/* Afordância "Ampliar": desaparece no repouso e sobe no hover/foco. Decorativa
+   (aria-hidden no HTML) — o nome acessível do tile já começa com "Ampliar: ". */
+.tile__zoom {
+  position: absolute;
+  right: var(--sp-5);
+  bottom: var(--sp-5);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1px solid var(--border-gold-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--dur-icon) var(--ease-hover), transform var(--dur-icon) var(--ease-cinema);
+  pointer-events: none;
+}
+.tile:hover .tile__zoom,
+.tile:focus-visible .tile__zoom { opacity: 1; transform: none; }
 .tile__cat {
   font-size: 0.65rem;
   letter-spacing: 0.18em;
@@ -986,6 +1033,12 @@ body.menu-open::before {
   background: rgba(6, 5, 4, 0.88);
   backdrop-filter: blur(6px);
 }
+/* Bloco 5 — ruling do gate (16/10): o lightbox NÃO anima a abertura. A entrada
+   em scale/fade engasgava no primeiro quadro, que é justamente o quadro em que o
+   top layer é promovido e o `backdrop-filter` do ::backdrop é rasterizado: o
+   humano preferiu a abertura instantânea. O ::backdrop já era (e continua)
+   estático. */
+
 .lightbox__figure { margin: 0; }
 .lightbox__img {
   width: 100%;
@@ -1719,7 +1772,7 @@ body.menu-open::before {
   .socials a:hover,
   .socials button:hover { transform: none; }
 
-  /* Bloco 4: o botão não levanta e o preenchimento congela no estado final */
+  /* Bloco 5: o zoom do tile não anima (congela na imagem de repouso) */
   .tile:hover img { transform: none; }
 
   .js .hero__media { transform: none; will-change: auto; }

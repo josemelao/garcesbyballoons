@@ -501,6 +501,9 @@
     var lightboxClose = $('#lightbox-close');
     var lastFocused = null;
 
+    /* Invalida uma troca pendente quando outro tile abre (ou o diálogo fecha) */
+    var lbTroca = 0;
+
     function openLightbox(tile) {
       var img = $('img', tile);
       var full = tile.getAttribute('data-full') || (img ? img.src : '');
@@ -512,12 +515,47 @@
       }
 
       lastFocused = tile;
-      lightboxImg.src = full;
+
+      /* 5.12 — o diálogo abre já com o bitmap que o tile está MOSTRANDO: mesma
+         foto, mesma proporção, já decodificada. Antes ele abria apontando para a
+         versão grande (w=1600 — uma URL que o srcset do tile nunca pede), então
+         os primeiros quadros da animação de entrada rodavam sobre uma caixa sem
+         imagem: a foto chegava no meio da entrada. Nas fotos em pé o diálogo
+         ainda mudava de altura nessa hora, porque o <img> do lightbox declara
+         1200x800 (3:2) e cinco das oito fotos não são 3:2. */
+      lightboxImg.src = (img && (img.currentSrc || img.src)) || full;
       lightboxImg.alt = img ? img.alt : '';
       lightboxTitle.textContent = tile.getAttribute('data-title') || '';
       lightboxCat.textContent = tile.getAttribute('data-cat-label') || '';
 
       lightbox.showModal();
+
+      /* ...e a versão grande entra por cima quando estiver pronta. O showModal
+         fica ANTES de propósito: o clique não espera rede. */
+      trocarPelaGrande(full);
+    }
+
+    /* 5.12 — a versão grande chega depois da abertura. Baixar E decodificar antes
+       de trocar evita que a decodificação trave o quadro da troca; se falhar,
+       fica a imagem do tile (nunca uma caixa quebrada). */
+    function trocarPelaGrande(url) {
+      if (!url || url === lightboxImg.getAttribute('src')) { return; }
+
+      var pedido = ++lbTroca;
+      var grande = new Image();
+      grande.decoding = 'async';
+
+      function aplicar() {
+        if (pedido === lbTroca) { lightboxImg.src = url; }
+      }
+
+      if (typeof grande.decode === 'function') {
+        grande.src = url;
+        grande.decode().then(aplicar, function () { /* falhou: fica a do tile */ });
+      } else {
+        grande.onload = aplicar;
+        grande.src = url;
+      }
     }
 
     tiles.forEach(function (tile) {
@@ -532,7 +570,17 @@
 
     if (lightbox) {
       lightbox.addEventListener('close', function () {
-        lightboxImg.src = '';
+        /* Nenhuma troca pendente mexe mais no lightbox */
+        lbTroca++;
+
+        /* 5.12 — sem `src = ''`: string vazia resolve para a URL do documento,
+           então o navegador pedia a PRÓPRIA PÁGINA como imagem, o load falhava e
+           o handler de erro da seção 13 injetava a reserva — que era justamente
+           o que aparecia no começo da abertura seguinte. Remover o atributo não
+           pede nada, não dispara o fallback, e ainda solta o bitmap grande
+           enquanto o diálogo está fechado. */
+        lightboxImg.removeAttribute('src');
+
         if (lastFocused) { lastFocused.focus(); }
       });
 
