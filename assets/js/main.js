@@ -366,6 +366,24 @@
     }
 
     /* -------------------------------------------------------------------
+       6c. Máscara das imagens: só abre quando os pixels chegam
+       (a máscara do CSS fica fechada até .is-loaded; sem JS ela não existe)
+       ------------------------------------------------------------------- */
+    $$('.hero__media, .about__media img').forEach(function (img) {
+      function markLoaded() { img.classList.add('is-loaded'); }
+
+      if (img.complete && img.naturalWidth) {
+        markLoaded(); /* já veio do cache */
+        return;
+      }
+
+      img.addEventListener('load', markLoaded, { once: true });
+      img.addEventListener('error', markLoaded, { once: true });
+      /* rede de segurança: a máscara nunca pode deixar a imagem escondida */
+      window.setTimeout(markLoaded, 1200);
+    });
+
+    /* -------------------------------------------------------------------
        7. Galeria: filtros
        ------------------------------------------------------------------- */
     var tiles = $$('#gallery .tile');

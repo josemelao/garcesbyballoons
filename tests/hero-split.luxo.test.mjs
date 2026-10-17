@@ -26,7 +26,7 @@ const configJs = readFileSync(resolve(root, 'assets/js/config.js'), 'utf8');
 const TITULO = 'Decoração com balões que transforma o seu evento em cenário';
 
 /* Mesmo harness do form.block3.test.mjs, reduzido ao que o hero precisa. */
-function boot({ reduced = false, runMain = true, mainSource = mainJs } = {}) {
+function boot({ reduced = false, runMain = true, mainSource = mainJs, prepare } = {}) {
   const dom = new JSDOM(html, {
     runScripts: 'outside-only',
     pretendToBeVisual: true,
@@ -46,6 +46,8 @@ function boot({ reduced = false, runMain = true, mainSource = mainJs } = {}) {
     window.Element.prototype.scrollIntoView = function () {};
   }
 
+  if (prepare) { prepare(window); }
+
   for (const s of window.document.querySelectorAll('script')) {
     if (s.type === 'application/ld+json') continue;
     if (s.getAttribute('src')) continue;
@@ -58,6 +60,19 @@ function boot({ reduced = false, runMain = true, mainSource = mainJs } = {}) {
   }
   return dom;
 }
+
+/* Controla o estado de carregamento das imagens (o jsdom não baixa nada). */
+function defineImageState(window, { complete, naturalWidth }) {
+  for (const prop of ['complete', 'naturalWidth']) {
+    Object.defineProperty(window.HTMLImageElement.prototype, prop, {
+      configurable: true,
+      get() { return prop === 'complete' ? complete : naturalWidth; },
+    });
+  }
+}
+
+const mediaImages = (dom) =>
+  Array.from(dom.window.document.querySelectorAll('.hero__media, .about__media img'));
 
 const wordsOf = (dom) => Array.from(dom.window.document.querySelectorAll('.hero__title .word'));
 const flatText = (dom) =>
@@ -126,6 +141,60 @@ test('luxo/3 · com movimento reduzido não há split (título estático)', () =
 
   assert.equal(wordsOf(dom).length, 0, 'reduced-motion não anima palavra por palavra');
   assert.equal(flatText(dom), TITULO);
+  dom.window.close();
+});
+
+/* ---------------------------------------------------------- máscara (A) --- */
+
+test('luxo/3 · a máscara abre no load, nas duas imagens (hero e Sobre)', () => {
+  const dom = boot({ prepare: (w) => defineImageState(w, { complete: false, naturalWidth: 0 }) });
+  const { window } = dom;
+  const imgs = mediaImages(dom);
+
+  assert.equal(imgs.length, 2, 'hero + retrato do Sobre');
+  for (const img of imgs) {
+    assert.equal(img.classList.contains('is-loaded'), false, 'sem load, a máscara fica fechada');
+    img.dispatchEvent(new window.Event('load'));
+    assert.equal(img.classList.contains('is-loaded'), true, 'no load, a máscara abre');
+  }
+  dom.window.close();
+});
+
+test('luxo/3 · imagem que já estava em cache é revelada no boot', () => {
+  const dom = boot({ prepare: (w) => defineImageState(w, { complete: true, naturalWidth: 1800 }) });
+
+  for (const img of mediaImages(dom)) {
+    assert.equal(img.classList.contains('is-loaded'), true, 'cache quente não pode esconder a foto');
+  }
+  dom.window.close();
+});
+
+test('luxo/3 · erro ao carregar também revela (mostra o placeholder)', () => {
+  const dom = boot({ prepare: (w) => defineImageState(w, { complete: false, naturalWidth: 0 }) });
+  const { window } = dom;
+  const [hero] = mediaImages(dom);
+
+  hero.dispatchEvent(new window.Event('error'));
+  assert.equal(hero.classList.contains('is-loaded'), true, 'imagem quebrada não fica escondida');
+  dom.window.close();
+});
+
+test('luxo/3 · rede de segurança: sem load nem erro, o timeout revela', () => {
+  const dom = boot({
+    prepare: (w) => {
+      defineImageState(w, { complete: false, naturalWidth: 0 });
+      w.__pending = [];
+      w.setTimeout = (fn) => { w.__pending.push(fn); return 0; };
+    },
+  });
+  const { window } = dom;
+  const imgs = mediaImages(dom);
+
+  assert.equal(window.__pending.length, imgs.length, 'um timeout por imagem');
+  assert.ok(imgs.every((i) => !i.classList.contains('is-loaded')), 'nada revelado antes do timeout');
+
+  window.__pending.forEach((fn) => fn());
+  assert.ok(imgs.every((i) => i.classList.contains('is-loaded')), 'o timeout garante a revelação');
   dom.window.close();
 });
 

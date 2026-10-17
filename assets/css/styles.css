@@ -1535,18 +1535,23 @@ body.menu-open::before {
   to   { opacity: 1; transform: none; }
 }
 
-/* Reveal com máscara: a imagem é descoberta de baixo para cima */
-@keyframes media-unveil {
-  from { clip-path: inset(0 0 100% 0); }
-  to   { clip-path: inset(0); }
-}
-.js .hero__media { animation: media-unveil var(--dur-reveal-lg) var(--ease-cinema) both; }
-
+/* Reveal com máscara: a imagem é descoberta de baixo para cima, mas só depois
+   que os pixels chegam (o JS marca .is-loaded). Sem isso a máscara abriria
+   sobre uma caixa vazia e a foto "apareceria de uma vez" ao decodificar. */
+.js .hero__media,
 .js .about__media img {
   clip-path: inset(0 0 100% 0);
-  transition: clip-path var(--dur-reveal-lg) var(--ease-cinema);
+  transition: clip-path 900ms var(--ease-soft) 100ms;
 }
-.js .about__media.is-visible img { clip-path: inset(0); }
+.js .hero__media.is-loaded { clip-path: inset(0); }
+.js .about__media.is-visible img.is-loaded { clip-path: inset(0); }
+
+/* A máscara é enfeite: sem movimento, a imagem aparece direto e não fica
+   esperando o load. */
+@media (prefers-reduced-motion: reduce) {
+  .js .hero__media,
+  .js .about__media img { clip-path: none; }
+}
 
 /* Split-text do H1: cada palavra sobe mascarada. O elemento .word só existe
    quando o JS roda, então sem JS o H1 fica exatamente como está no HTML. */
