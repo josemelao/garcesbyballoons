@@ -1572,7 +1572,10 @@ body.menu-open::before {
   caret-color: var(--text);
 }
 
-.field__error { font-size: 0.8rem; color: var(--error); display: none; }
+/* Os erros NUNCA aparecem inline: cada campo mostra borda vermelha e a
+   mensagem geral vive ao lado do botao de envio (.form__status) — assim a
+   validacao nao empurra nenhum campo. */
+.field__error { display: none; }
 .field.has-error input,
 .field.has-error select,
 .field.has-error textarea {
@@ -1627,6 +1630,8 @@ body.menu-open::before {
 
 .form__note { margin-top: var(--sp-5); font-size: 0.8rem; color: var(--text-muted); }
 .form__actions { margin-top: var(--sp-6); display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: center; }
+/* a mensagem de erro vive ao lado do botao (ou abaixo, no mobile, via wrap) */
+.form__status { flex: 1 1 220px; align-self: center; }
 
 .form__spinner {
   width: 16px; height: 16px;

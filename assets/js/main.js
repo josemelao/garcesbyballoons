@@ -699,17 +699,17 @@
 
         var message = rules[name](input.value || '');
         var field = fieldOf(name);
-        var error = errorOf(name);
 
         if (message) {
+          /* sem mensagem inline: o campo ganha borda vermelha (.has-error) e a
+             mensagem geral aparece ao lado do botao de envio (.form__status),
+             sem empurrar nenhum campo. */
           if (field) { field.classList.add('has-error'); }
-          if (error) { error.textContent = message; }
           input.setAttribute('aria-invalid', 'true');
           return false;
         }
 
         if (field) { field.classList.remove('has-error'); }
-        if (error) { error.textContent = ''; }
         input.removeAttribute('aria-invalid');
         return true;
       }
@@ -838,6 +838,10 @@
 
         var invalid = validateAll();
         if (invalid.length) {
+          /* mensagem geral ao lado do botao (visao) + resumo no topo com links
+             (leitor de tela) — o mesmo array alimenta os dois */
+          setStatus('error', ICON_ALERT,
+            'Complete os campos destacados: ' + invalid.map(fieldLabel).join(', ') + '.');
           showSummary(invalid);
           return;
         }
