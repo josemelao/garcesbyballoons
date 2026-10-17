@@ -99,6 +99,20 @@
   --dur-stagger: 60ms;
   --ease-hover:  cubic-bezier(0.2, 0.8, 0.3, 1);
   --ease-reveal: cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Luxo: chegada desacelerando (expo-out) e suavização simétrica */
+  --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft:   cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-reveal-lg: 760ms;
+  --dur-icon:      220ms;
+
+  /* --- Ouro metálico ----------------------------------------------------- */
+  --gold-hi:    #F3E1A3;
+  --gold-metal: linear-gradient(135deg, #F3E1A3 0%, #D4AF37 38%, #A16207 72%, #E8CD6B 100%);
+  --sheen:      linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.5) 48%, transparent 66%);
+
+  /* --- Material (textura) ------------------------------------------------ */
+  --grain-opacity: 0.035;
+  --aura-gold:     rgba(212, 175, 55, 0.10);
 
   --z-base:    1;
   --z-sticky:  100;

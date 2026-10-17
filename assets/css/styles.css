@@ -60,6 +60,22 @@ p { text-wrap: pretty; }
 }
 
 /* --------------------------------------------------------------------------
+   1b. Grão cinematográfico (textura de filme, global e estática)
+   Um tile SVG pequeno e repetido — barato, sem impacto de layout.
+   -------------------------------------------------------------------------- */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+}
+
+/* --------------------------------------------------------------------------
    2. Acessibilidade e foco
    -------------------------------------------------------------------------- */
 :focus-visible {
