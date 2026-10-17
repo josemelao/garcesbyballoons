@@ -140,6 +140,16 @@ body::after {
 .u-mt-6 { margin-top: var(--sp-6); }
 .u-mt-8 { margin-top: var(--sp-8); }
 
+/* Utilitário: ouro metálico no texto (gradiente recortado no glifo) */
+.text-gold-metal {
+  background-image: var(--gold-metal);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 /* --------------------------------------------------------------------------
    4. Cabeçalho de seção
    -------------------------------------------------------------------------- */
@@ -157,7 +167,7 @@ body::after {
   content: "";
   width: 28px;
   height: 1px;
-  background: var(--gold-deep);
+  background: linear-gradient(90deg, var(--gold), transparent);
 }
 .band-light .eyebrow { color: var(--gold-on-cream); }
 
@@ -473,7 +483,42 @@ body.menu-open::before {
   margin-top: var(--sp-6);
   max-width: var(--maxw-text);
 }
-.hero__title em { font-style: italic; color: var(--gold); }
+.hero__title em {
+  font-style: italic;
+  background-image: var(--gold-metal);
+  background-size: 220% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* brilho lento: o metal "passa" pelo glifo (1 único elemento animado por view) */
+  animation: gold-sheen 9s linear infinite;
+}
+
+@keyframes gold-sheen {
+  0%   { background-position: 180% 50%; }
+  100% { background-position: -80% 50%; }
+}
+
+/* Fallbacks: sem recorte de texto (ou em modo de cores forçadas) o gradiente
+   recortado deixaria o título invisível — volta ao dourado sólido. */
+@supports not (-webkit-background-clip: text) {
+  .text-gold-metal,
+  .hero__title em {
+    background: none;
+    color: var(--gold);
+  }
+}
+@media (forced-colors: active) {
+  .text-gold-metal,
+  .hero__title em {
+    background: none;
+    color: CanvasText;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero__title em { animation: none; background-position: 35% 50%; }
+}
 
 .hero__lead {
   margin-top: var(--sp-6);
@@ -1536,5 +1581,12 @@ body.menu-open::before {
 @media print {
   .nav, .wa-bubble, .hero__media, .preview-notice { display: none; }
   body { background: #fff; color: #000; }
+  /* o gradiente recortado não é impresso: garante texto preto legível no papel */
+  .text-gold-metal, .hero__title em {
+    background: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: #000;
+  }
   .faq__body { grid-template-rows: 1fr !important; }
 }
