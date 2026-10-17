@@ -6,10 +6,10 @@
     "semantic_hash": "3b59a88cd28433c3babba29c099502ed"
   },
   "assets/js/main.js": {
-    "mtime": 1792105460.7463784,
-    "seen": 1792113008.214249,
-    "ast_hash": "dd485ae2188532074da6490532356f9f",
-    "semantic_hash": "dd485ae2188532074da6490532356f9f"
+    "mtime": 1792241255.4491558,
+    "seen": 1792241825.085991,
+    "ast_hash": "474280f47f5dcaea7ca872b5e2592fca",
+    "semantic_hash": ""
   },
   ".opencode/agents/pev/architect.md": {
     "mtime": 1792107505.0091295,
@@ -48,15 +48,93 @@
     "semantic_hash": "5fc39d561e2480f39b8c224e0f049eb0"
   },
   "index.html": {
-    "mtime": 1792108207.454805,
-    "seen": 1792113008.2142735,
-    "ast_hash": "4627e3c3589ea6d153a6af2e1bf6290e",
-    "semantic_hash": "4627e3c3589ea6d153a6af2e1bf6290e"
+    "mtime": 1792237485.2569695,
+    "seen": 1792237598.6114168,
+    "ast_hash": "6df4aad00ee2f331472511a5b2ec7252",
+    "semantic_hash": ""
   },
   "relatorio.md": {
     "mtime": 1792106294.6754053,
     "seen": 1792113008.214275,
     "ast_hash": "d5c0a7b8dfb9f35ca686a745553495c7",
     "semantic_hash": "d5c0a7b8dfb9f35ca686a745553495c7"
+  },
+  "package.json": {
+    "mtime": 1792115496.9050286,
+    "seen": 1792194048.9558933,
+    "ast_hash": "9850f3abacb5a130b57f78f3e3d51144",
+    "semantic_hash": ""
+  },
+  "tests/form.block3.test.mjs": {
+    "mtime": 1792115519.5997536,
+    "seen": 1792194048.955896,
+    "ast_hash": "c7be9e5f9ba9073bb2568195b5792fec",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1792194028.9591322,
+    "seen": 1792194048.9559104,
+    "ast_hash": "db2b64f58dab9bc397cf3d5852366fbc",
+    "semantic_hash": ""
+  },
+  "planov0.md": {
+    "mtime": 1792113386.5414896,
+    "seen": 1792194048.9559147,
+    "ast_hash": "726b80cea698ee525cfa4749f1af1143",
+    "semantic_hash": ""
+  },
+  "privacidade.html": {
+    "mtime": 1792194028.9662614,
+    "seen": 1792194048.955916,
+    "ast_hash": "1803398b626926e728e318c7c677371a",
+    "semantic_hash": ""
+  },
+  "robots.txt": {
+    "mtime": 1792194028.9662614,
+    "seen": 1792194048.9559188,
+    "ast_hash": "e0f74e1282d17a2335dd3977993bce7f",
+    "semantic_hash": ""
+  },
+  "assets/img/apple-touch-icon.png": {
+    "mtime": 1792194028.9621432,
+    "seen": 1792194048.9559202,
+    "ast_hash": "d4c7ac49d81819ac190013b0f50f2d2e",
+    "semantic_hash": ""
+  },
+  "PLANO-LUXO.md": {
+    "mtime": 1792240424.89398,
+    "seen": 1792241825.0860224,
+    "ast_hash": "19f06515558dbff473906098552c12eb",
+    "semantic_hash": ""
+  },
+  "tests/hero-split.luxo.test.mjs": {
+    "mtime": 1792198494.7578459,
+    "seen": 1792199136.9730446,
+    "ast_hash": "c1e481c2fc5b132f1f941f742f293b52",
+    "semantic_hash": ""
+  },
+  "tests/lightbox-abertura.luxo.test.mjs": {
+    "mtime": 1792202519.2187924,
+    "seen": 1792202774.5055969,
+    "ast_hash": "20e01a664b48b423288fb86d7727165f",
+    "semantic_hash": ""
+  },
+  "tests/spotlight-cards.luxo.test.mjs": {
+    "mtime": 1792205817.5915556,
+    "seen": 1792206074.6620376,
+    "ast_hash": "9336ee5d02ff11a874987996f0d324ed",
+    "semantic_hash": ""
+  },
+  "tests/hero-parallax.luxo.test.mjs": {
+    "mtime": 1792237366.6858773,
+    "seen": 1792237598.6113844,
+    "ast_hash": "37b61073e434439c086d296613158ee1",
+    "semantic_hash": ""
+  },
+  "tests/magnetic-buttons.luxo.test.mjs": {
+    "mtime": 1792241250.6818614,
+    "seen": 1792241825.086008,
+    "ast_hash": "acd49fc8599166df4fd5aebbdebfcb3f",
+    "semantic_hash": ""
   }
 }
