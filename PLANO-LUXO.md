@@ -14,7 +14,7 @@
 
 ## Status de execução (atualizado em 17/10/2026)
 
-**Branch:** `feat/luxo` · **Blocos 0 a 8 executados e com gate visual aprovado pelo humano.**
+**Branch:** `feat/luxo` · **Blocos 0 a 9 executados e com gate visual aprovado pelo humano.** (O Bloco 9 entregou **um** dos quatro itens opcionais; os outros três foram descartados com racional — ver a tabela e as decisões.)
 
 | Bloco | Commit | Estado |
 | --- | --- | --- |
@@ -30,11 +30,12 @@
 | 6. Cards, superfícies e vidro fumê (+ adendo "featured no hover"; spotlight seguindo o cursor nas 3 seções) | `e003f97` | ✅ aprovado |
 | 7. Depoimentos editoriais (respiro e full-bleed **reprovados e revertidos no gate**; marquee e avatar descartados antes) | `21451e2` | ✅ aprovado |
 | 8. Hero: Ken Burns perpétuo **só no desktop** (≥900px) + parallax por variável + slot de vídeo comentado | `cfe034c` | ✅ aprovado |
+| 9. Botões magnéticos (item 2 do bloco opcional; itens 1, 3 e 4 **descartados**) | `a7f73c1` | ✅ aprovado |
 | — (documentação da suíte de testes) | `b19b1db` | — |
 
-**Testes:** `npm test` → **43/43** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs` + 3 novos em `tests/hero-parallax.luxo.test.mjs`).
+**Testes:** `npm test` → **48/48** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs` + 3 em `tests/hero-parallax.luxo.test.mjs` + 5 em `tests/magnetic-buttons.luxo.test.mjs`).
 
-**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23, bloco8 25/25 - verificam a presença/forma das regras, os fallbacks e as contas de contraste. **10 contratos, 0 falhas.**
+**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23, bloco8 25/25, bloco9 23/23 - verificam a presença/forma das regras, os fallbacks e as contas de contraste. **11 contratos, 0 falhas.**
 
 ### Decisões tomadas durante a execução (divergências do plano)
 
@@ -93,7 +94,11 @@
 - **O ganho estrutural do bloco é o Step 3** (Bloco 8): o JS escrevia `transform` inline na imagem a cada quadro de rolagem, com o `scale(1.12)` **duplicado dentro da string** — qualquer mudança de CSS no transform era silenciosamente ignorada. Passou a publicar `--hero-y` (`setProperty`) e o CSS compõe. Sem ele, o Ken Burns no wrapper brigaria pelo mesmo transform a cada rolagem.
 - **A máscara do Bloco 3 não conflitou** (Bloco 8): o `clip-path` fica na imagem e a animação no wrapper — elementos diferentes, como o wrapper existe justamente para isso. O contrato guarda a máscara (`inset(0 0 100% 0)` → `.is-loaded` → `none` em reduced-motion) para o refactor não a levar junto.
 - **O slot de vídeo é SÓ COMENTÁRIO** (Bloco 8): um `<video>` sem fonte é um elemento vazio que o leitor de tela anuncia. O contrato trava "nenhum `<video>` real no HTML" e confere que o comentário guarda o que importa para reativar (`poster` + `muted loop playsinline` + `preload="none"`).
-- **Commits dos Blocos 4 a 8 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido). Segue um commit por bloco; as versões antigas ficam no reflog.
+- **O Bloco 9 foi reduzido a 1 dos 4 itens** (gate 17/10): o humano escolheu "só os botões magnéticos". Os outros três caíram com racional, um a um: (a) o **`view-transition` no lightbox contradiz o ruling do Bloco 5** — o CSS guarda, na linha do `.lightbox`, "o lightbox NÃO anima a abertura"; reabrir isso sem fato novo é exatamente o que a branch evita; (b) o **GSAP** quebra a constraint de zero dependências de runtime e **não tem o que fazer** — o que restou de coreografia (reveals escalonados, split-text) já roda com `IntersectionObserver` + `animation-delay` desde o Bloco 3; (c) o **cursor dourado custom** é o item de maior risco: exige `cursor: none` (esconder o ponteiro do SO, que é a âncora de precisão de quem usa mouse) e obrigaria a replicar todos os estados de cursor que o CSS já declara, senão o site fica com um ponto dourado onde deveria dizer "clicável".
+- **O conflito com o ruling do Bloco 4 foi levantado ANTES de escrever código** (Bloco 9): o Bloco 4 tirou **todo** movimento de botão no hover a pedido do humano ("qualquer coisa andando no hover incomodava"), inclusive um deslize de 3px — e o magnético é maior que isso. A distinção, registrada no próprio CSS: aquele 3px era movimento **espontâneo** (o ícone deslizava ao entrar no hover, independente do ponteiro); o magnético é **dirigido pelo cursor** e volta ao lugar no `pointerleave`. O humano confirmou "faz como o plano" e, no gate, pediu **mais discreto**.
+- **O magnético foi afinado no gate** (Bloco 9): o limite caiu de 6px para **4px** (o mesmo deslocamento do deslize que o Bloco 4 cortou) e a volta de 220ms para **160ms** (`--dur-magnet` é o token novo; nenhum token existente foi tocado). O deslocamento é normalizado pela meia-largura/meia-altura do botão: **zero no centro, saturando em 4px nas bordas** — o CTA nunca "foge" do clique.
+- **O magnético publica variáveis, não transform** (Bloco 9): o `transform` base do `.btn` é `translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0)` e o JS só escreve `--mag-x`/`--mag-y` — nenhum `style.transform` no bloco novo (lição do Bloco 8; o único `style.transform` que sobrou no arquivo é o **arrasto da galeria**, onde o inline *é* a posição durante o gesto, e o contrato do bloco passou a checar só o próprio recorte). Sem `will-change`, só em ponteiro fino com hover, uma escrita por quadro (rAF) e uma flag `dentro` para um quadro agendado não escrever atrasado por cima da volta.
+- **Commits dos Blocos 4 a 9 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido); o do 9 foi `77e2d77` → `a7f73c1` (magnético mais discreto). Segue um commit por bloco; as versões antigas ficam no reflog.
 - **Sem revisão de contexto fresco por bloco** (Blocos 5, 6 e 7): em execução inline o revisor único é o da branch inteira, na "Revisão global" do plano, depois do Bloco 9.
 - **Commits dos Blocos 4, 5 e 6 amendados** quando o gate pediu mudança antes de aprovar (`00aa182` → `e003f97` no Bloco 6): a constraint é 1 commit por bloco, e as versões antigas ficam no reflog.
 
@@ -117,10 +122,15 @@
 - **Em reduced-motion a foto do hero agora fica em 1.12** (Bloco 8): antes a seção 20 zerava o transform da imagem (`transform: none`) e ela caía para 1.0. É framing, não movimento — e o usuário de reduced-motion passa a ver a **mesma composição** do resto da página, só congelada.
 - **O Ken Burns só roda com `.js`** (Bloco 8, como no snippet do plano): se `main.js` falhar, o hero fica parado, com o mesmo enquadramento. No celular a regra nem existe (media query), então lá o hero é imóvel por desenho, não por degradação.
 - **O `.hero__mediawrap` ganhou `overflow: hidden` próprio** (Bloco 8): o `.hero` já recortava, mas a moldura não depende mais disso se aquela seção for mexida.
+- **O botão magnético persegue o ponteiro em vez de colar nele** (Bloco 9): a transição de `--dur-magnet` (160ms) vale para os dois sentidos, então durante a perseguição o botão fica um pouco atrás do cursor — é o que dá o ar "fluido". Se um dia incomodar, zerar a transição **durante** a perseguição (uma classe `.is-magnet` que zera só a `duration` do transform) e manter os 160ms só na volta.
+- **O gate `(hover: hover) and (pointer: fine)` é avaliado uma vez, no boot** (Bloco 9, igual ao spotlight do Bloco 6 e ao parallax do Bloco 8): num híbrido, trocar de dedo para mouse com a página aberta não liga/desliga o efeito até recarregar. Custo de resolver: um listener de `matchMedia` por feature — não se paga.
+- **O teto de 6px do magnético agora é checado pelo contrato** (Bloco 9): a checagem trava "o limite segue pequeno (≥1px e ≤6px)", para uma afinação futura não transformar o CTA num botão que escapa do clique.
 
-### Próximo bloco
+### Próximo passo
 
-**Bloco 9 — Extras opcionais.** *(O Bloco 8 está commitado em `cfe034c` e **aprovado** pelo gate visual — "aprovado", 17/10 — com o Ken Burns perpétuo só no desktop. O Bloco 9 é o único que depende de escolha sua: ele é uma **lista**, não um bloco fechado, e cada item é opcional, com commit próprio.)*
+**Bloco 9 — Extras opcionais.** *(**Fechado**: commit `a7f73c1`, aprovado no gate visual de 17/10 com o item 2 — botões magnéticos — e os itens 1, 3 e 4 descartados com racional.)*
+
+**Revisão global (depois do último bloco aprovado).** *É o que vem agora: `npm test`, os 6 itens do Review Focus, a varredura de reduced-motion, o fallback sem JS, `graphify update .` — e o **revisor de contexto fresco** sobre o diff da branch inteira, o único da branch (cada bloco rodou sem um).*
 
 ---
 
@@ -549,12 +559,14 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 
 **Objetivo:** assinaturas avançadas, uma a uma, com validação.
 
-- [ ] **Step 1:** Cursor dourado custom (ponto/anel que cresce sobre a galeria) — **desligado em touch e reduced-motion**.
-- [ ] **Step 2:** Botões magnéticos (magnetic cursor follow) — só em ponteiro fino.
-- [ ] **Step 3:** `view-transition` ao abrir/fechar o lightbox (progressive enhancement).
-- [ ] **Step 4:** Se (e só se) quiser coreografia avançada: avaliar GSAP — isto **quebra** a constraint de zero dependências e precisa de aprovação explícita.
+- [ ] **Step 1 (DESCARTADO no gate, 17/10):** Cursor dourado custom (ponto/anel que cresce sobre a galeria) — **desligado em touch e reduced-motion**. Fora porque exige `cursor: none` (esconder o ponteiro do sistema) e obrigaria a replicar todos os estados de cursor que o CSS já declara; é o item em que "luxo" escorrega para "truque".
+- [x] **Step 2:** Botões magnéticos (magnetic cursor follow) — só em ponteiro fino. **Feito em 17/10** (o único item executado), com o gate reabrindo **explicitamente** o ruling do Bloco 4 que tirou todo movimento de botão no hover: o magnético é movimento dirigido pelo cursor, não espontâneo. Afinado no gate para **4px** de limite e **160ms** de volta. Publica `--mag-x`/`--mag-y` e o CSS compõe; nada de `style.transform`.
+- [ ] **Step 3 (DESCARTADO no gate, 17/10):** `view-transition` ao abrir/fechar o lightbox. **Contradiz o ruling do Bloco 5** ("o lightbox NÃO anima a abertura"), que está gravado no próprio CSS.
+- [ ] **Step 4 (DESCARTADO no gate, 17/10):** GSAP para coreografia avançada. Quebraria a constraint de zero dependências de runtime sem ter o que fazer — o que restou de coreografia já roda com `IntersectionObserver` + `animation-delay` desde o Bloco 3.
 
-**Commit:** por item, `feat(ux): <item>`.
+**Validação visual (gate):** hover nos botões com o deslocamento discreto, sem "borrachar"; nada em touch nem em reduced-motion; a varredura do Bloco 4 intacta. — **✅ aprovado pelo humano em 17/10**, depois de um ajuste ("mais discreto": 6px → 4px, 220ms → 160ms). Números: 48/48 testes, 11 contratos sem falha (bloco9 23/23); o deslocamento é zero no centro e satura em 4px nas bordas.
+
+**Commit:** por item, `feat(ux): <item>` → em ASCII, pela convenção do repo: `a7f73c1 feat(ux): botoes magneticos (Bloco 9)` *(amendado de `77e2d77` quando o gate pediu o ajuste; a versão antiga fica no reflog)*.
 
 ---
 
