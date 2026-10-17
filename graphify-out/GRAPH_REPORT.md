@@ -1,17 +1,17 @@
 # Graph Report - Balloons  (2026-10-17)
 
 ## Corpus Check
-- 19 files · ~33,860 words
+- 19 files · ~33,906 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 4 file(s) not represented in the graph (top: (none) 1, .css 1, .webmanifest 1)
 
 ## Summary
-- 191 nodes · 253 edges · 14 communities (12 shown, 2 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 21 edges (avg confidence: 0.89)
+- 191 nodes · 252 edges · 14 communities (12 shown, 2 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 22 edges (avg confidence: 0.89)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `db686bf7`
+- Built from commit: `86f21486`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -70,15 +70,15 @@ Nodes (17): index.html — Garcês by Balloons Landing Page, data-cfg-* Config P
 
 ### Community 1 - "main"
 Cohesion: 0.08
-Nodes (28): formatPhone(), instagramHandle(), main(), applyFilter(), buildWhatsAppMessage(), clearStatus(), closeMenu(), cssTimeMs() (+20 more)
+Nodes (25): formatPhone(), instagramHandle(), main(), applyFilter(), closeMenu(), cssTimeMs(), errorOf(), fieldLabel() (+17 more)
 
 ### Community 2 - "PEV Workflow Orchestration"
 Cohesion: 0.39
 Nodes (5): PEV Architect Agent (Phase 1: PLAN), PEV Coder Agent (Phase 2: EXECUTE), PEV QA Agent (Phase 3: VERIFY), PEV Slash Command (/pev), PEV Workflow Skill
 
 ### Community 3 - "Plano de Ação v0 — Garcês by Balloons"
-Cohesion: 0.13
-Nodes (14): Bloco 0 — Decisões/conteúdo (sem PEV), Bloco 10 — A11y fina, extras & validação (P2), Bloco 1 — Contraste & tokens (P0), Bloco 2 — SEO & conformidade (P0), Bloco 5 — Filtros & lightbox sem JS (P1), Bloco 6 — Conversão/CTA (P1), Bloco 7 — Layout & responsivo (P1/P2), Bloco 8 — Performance (P1) (+6 more)
+Cohesion: 0.11
+Nodes (17): buildWhatsAppMessage(), clearStatus(), Bloco 0 — Decisões/conteúdo (sem PEV), Bloco 10 — A11y fina, extras & validação (P2), Bloco 1 — Contraste & tokens (P0), Bloco 2 — SEO & conformidade (P0), Bloco 3 — Formulário à prova de JS (P0), Bloco 5 — Filtros & lightbox sem JS (P1) (+9 more)
 
 ### Community 4 - "Garcês by Balloons — Passada de Luxo · Plano de Implementação"
 Cohesion: 0.09
@@ -122,15 +122,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `main()` connect `main` to `Plano de Ação v0 — Garcês by Balloons`, `Garcês by Balloons — Passada de Luxo · Plano de Implementação`?**
   _High betweenness centrality (0.128) - this node is a cross-community bridge._
-- **Are the 6 inferred relationships involving `main()` (e.g. with `closeLightbox()` and `onEnd()`) actually correct?**
-  _`main()` has 6 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 7 inferred relationships involving `main()` (e.g. with `closeLightbox()` and `fieldLabel()`) actually correct?**
+  _`main()` has 7 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `JSON-LD LocalBusiness Structured Data`, `Missing LGPD / Privacy Policy Link`, `PEV Slash Command (/pev)` to the rest of the system?**
   _3 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `main` be split into smaller, more focused modules?**
-  _Cohesion score 0.07827260458839407 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08412698412698413 - nodes in this community are weakly interconnected._
 - **Why does `jsdom` connect `package.json` to `lightbox-abertura.luxo.test.mjs`, `spotlight-cards.luxo.test.mjs`, `hero-split.luxo.test.mjs`, `magnetic-buttons.luxo.test.mjs`, `hero-parallax.luxo.test.mjs`, `form.block3.test.mjs`?**
   _High betweenness centrality (0.060) - this node is a cross-community bridge._
 - **Should `Plano de Ação v0 — Garcês by Balloons` be split into smaller, more focused modules?**
-  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
 - **Should `Garcês by Balloons — Passada de Luxo · Plano de Implementação` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
