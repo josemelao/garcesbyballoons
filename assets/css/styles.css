@@ -1274,10 +1274,20 @@ body.menu-open::before {
   color: var(--text);
 }
 /* Bloco 6: a superfície do badge é o utilitário .glass (mesma linguagem da
-   barra do header). A borda ouro forte é própria do badge e vence o
-   `border: 1px solid transparent` do .glass pela especificidade, sem depender
-   da ordem em que os dois aparecem no arquivo. */
+   barra do header: blur + fio de luz no topo). A borda ouro forte é própria
+   do badge e vence o `border: 1px solid transparent` do .glass pela
+   especificidade, sem depender da ordem em que os dois aparecem no arquivo. */
 .about__badge.glass { border-color: var(--border-gold-strong); }
+/* Revisão global (I2): o badge é o único vidro sobre uma FOTO crua (o da
+   barra fica sobre o scrim do hero, cujo brilho é limitado), então o alpha
+   .55 do utilitário não segura o span dourado de 12px: no ponto mais claro do
+   vidro ele media 4,20:1, abaixo dos 4,5:1 de texto normal. Um alpha próprio
+   devolve a folga — .78 dá 4,92:1 até contra branco puro, logo vale para
+   qualquer foto. O `@supports` preserva o fallback opaco (.92) do utilitário
+   quando não há backdrop-filter. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .about__badge.glass { background: rgba(12, 10, 9, 0.78); }
+}
 .about__badge strong { display: block; font-family: var(--font-display); font-size: 1.05rem; }
 .about__badge span {
   font-size: var(--fs-label);
@@ -1786,14 +1796,26 @@ body.menu-open::before {
      o negativo devolve o espaçamento original entre as palavras */
   padding-inline: 0.06em;
   margin-inline: -0.06em;
+  /* Revisão global (I1): a máscara também cortava a tinta na VERTICAL. Com
+     --lh-tight (1.08) a caixa da palavra tem 1.08em, mas o ascent+descent da
+     Playfair é ~1.33em: o ç de "Decoração" e o q de "que" perdiam 5,6px em
+     1440 (medido no Chrome). O padding alarga a janela do recorte e o margem
+     negativa devolve o ritmo vertical — como o margem encolhe a caixa de
+     margem na mesma medida, a tinta e o line-height do título não se movem. */
+  padding-block: 0.13em;
+  margin-block: -0.13em;
 }
 .word__inner {
   display: inline-block;
   animation: word-up 0.8s var(--ease-cinema) both;
   animation-delay: calc(var(--i, 0) * var(--dur-stagger));
 }
+/* A subida tem de ser maior que a caixa (1.08em + 2x0.13em = 1.34em) para a
+   palavra ficar INTEIRA fora do recorte no quadro inicial: 130% cobre até um
+   fallback de ascent+descent maior que o da Playfair. O contrato do Bloco 3
+   checa essa relação, não o número solto. */
 @keyframes word-up {
-  from { transform: translateY(110%); }
+  from { transform: translateY(130%); }
   to   { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
