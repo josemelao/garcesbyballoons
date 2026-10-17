@@ -14,7 +14,7 @@
 
 ## Status de execução (atualizado em 17/10/2026)
 
-**Branch:** `feat/luxo` · **Blocos 0 a 7 executados e com gate visual aprovado pelo humano.**
+**Branch:** `feat/luxo` · **Blocos 0 a 8 executados e com gate visual aprovado pelo humano.**
 
 | Bloco | Commit | Estado |
 | --- | --- | --- |
@@ -29,11 +29,12 @@
 | 5. Galeria e lightbox (abertura sem animação, por decisão do gate) | `aab0aea` | ✅ aprovado |
 | 6. Cards, superfícies e vidro fumê (+ adendo "featured no hover"; spotlight seguindo o cursor nas 3 seções) | `e003f97` | ✅ aprovado |
 | 7. Depoimentos editoriais (respiro e full-bleed **reprovados e revertidos no gate**; marquee e avatar descartados antes) | `21451e2` | ✅ aprovado |
+| 8. Hero: Ken Burns perpétuo **só no desktop** (≥900px) + parallax por variável + slot de vídeo comentado | `cfe034c` | ✅ aprovado |
 | — (documentação da suíte de testes) | `b19b1db` | — |
 
-**Testes:** `npm test` → **40/40** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs`).
+**Testes:** `npm test` → **43/43** (6 originais + 12 em `tests/hero-split.luxo.test.mjs` + 11 em `tests/lightbox-abertura.luxo.test.mjs` + 11 em `tests/spotlight-cards.luxo.test.mjs` + 3 novos em `tests/hero-parallax.luxo.test.mjs`).
 
-**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23 - verificam a presença/forma das regras, os fallbacks e as contas de contraste.
+**Contratos estáticos** (em `.superpowers/sdd/2026-10-16-garces-luxo-plano/`, fora do site): bloco1 20/20, bloco1b 25/25, bloco2 18/18, bloco3 21/21, bloco4 63/63, bloco5 54/54, bloco6 52/52, bloco7 23/23, bloco8 25/25 - verificam a presença/forma das regras, os fallbacks e as contas de contraste. **10 contratos, 0 falhas.**
 
 ### Decisões tomadas durante a execução (divergências do plano)
 
@@ -86,7 +87,13 @@
 - **A assinatura do depoimento ganhou um fio dourado acima** (`border-top` + `padding-top`): hierarquia editorial, escolha minha — não estava no plano.
 - **`.quote` entrou no idioma do Bloco 6 e no spotlight do cursor**: glow + borda ouro + `--surface-2` no hover, com `position: relative` explícito (sem ele o `::after` resolveria contra o `.section--soft`, que ganhou `position: relative` no Bloco 6). Consequência: a lista de seletores travada pelo contrato do Bloco 6 foi **estendida** com `.quote::after` — mesmo precedente do Bloco 6 rev 1 (o contrato registra um snapshot; a extensão entra por ruling, sem afrouxar nenhuma checagem existente).
 - **O contrato do Bloco 7 nasceu RED-first e foi invertido no gate**: das 31 checagens escritas para o pacote original, 9 eram da faixa full-bleed e viraram 1 de **ausência** ("SEM bleed em CSS/HTML/JS"), ao lado de "SEM marquee" e "SEM avatar" — ruling vira checagem para não se perder num refactor. Terminou com **23 checagens**.
-- **Commits dos Blocos 4 a 7 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido). Segue um commit por bloco; as versões antigas ficam no reflog.
+- **A escala base de 1.12 saiu da imagem e passou para o wrapper** (Bloco 8) — a divergência mais importante do bloco. O snippet do plano punha `1.06 → 1.14` no wrapper **mantendo** o `scale(1.12)` da imagem: os dois multiplicariam (1,12 × 1,14 = **1,28**, um zoom que ninguém aprovou) e comeriam a moldura da foto. Agora o wrapper é dono de toda a escala: no celular e em reduced-motion ele fica **parado em 1.12** (o enquadramento de antes, intacto) e no desktop o Ken Burns oscila em torno dele (`1.08 → 1.16`, média 1,12 = o repouso aprovado no Bloco 4). Bônus medido: o 1.06 do plano dava só 13,5px de folga nas bordas num hero de 900px; o 1.08 dá 36px.
+- **O Ken Burns é perpétuo, mas só no desktop (≥900px)** — decisão do humano no gate (17/10), entre 4 opções apresentadas (uma tacada que assenta / perpétuo como o plano / perpétuo só no desktop / sem Ken Burns). No celular o hero fica **imóvel**: rasterizar um bitmap de 1800w em tela cheia o tempo todo não se paga em ~5s de visita. O contrato trava isso: existe **uma única** regra `animation: kb` no CSS, e ela mora dentro da media query de 900px.
+- **Sem `will-change` no wrapper** (Bloco 8): o snippet do plano adicionava, contra o precedente do Bloco 2 (a animação já promove a camada; a decisão de lá foi omitir).
+- **O ganho estrutural do bloco é o Step 3** (Bloco 8): o JS escrevia `transform` inline na imagem a cada quadro de rolagem, com o `scale(1.12)` **duplicado dentro da string** — qualquer mudança de CSS no transform era silenciosamente ignorada. Passou a publicar `--hero-y` (`setProperty`) e o CSS compõe. Sem ele, o Ken Burns no wrapper brigaria pelo mesmo transform a cada rolagem.
+- **A máscara do Bloco 3 não conflitou** (Bloco 8): o `clip-path` fica na imagem e a animação no wrapper — elementos diferentes, como o wrapper existe justamente para isso. O contrato guarda a máscara (`inset(0 0 100% 0)` → `.is-loaded` → `none` em reduced-motion) para o refactor não a levar junto.
+- **O slot de vídeo é SÓ COMENTÁRIO** (Bloco 8): um `<video>` sem fonte é um elemento vazio que o leitor de tela anuncia. O contrato trava "nenhum `<video>` real no HTML" e confere que o comentário guarda o que importa para reativar (`poster` + `muted loop playsinline` + `preload="none"`).
+- **Commits dos Blocos 4 a 8 amendados quando o gate pediu mudança antes de aprovar**: o do 7 foi `398aae2` → `c2bf3ce` (respiro revertido + aspas apertadas) → `21451e2` (bleed removido). Segue um commit por bloco; as versões antigas ficam no reflog.
 - **Sem revisão de contexto fresco por bloco** (Blocos 5, 6 e 7): em execução inline o revisor único é o da branch inteira, na "Revisão global" do plano, depois do Bloco 9.
 - **Commits dos Blocos 4, 5 e 6 amendados** quando o gate pediu mudança antes de aprovar (`00aa182` → `e003f97` no Bloco 6): a constraint é 1 commit por bloco, e as versões antigas ficam no reflog.
 
@@ -106,10 +113,14 @@
 - **As aspas decorativas do depoimento ficam em 2,28:1 no hover** (Bloco 7): o glifo em `--gold` a `opacity: .5` dá 3,04:1 sobre `--surface` (o repouso) e 2,28:1 sobre `--surface-2`, que é o fundo **no hover**. É texto grande **puramente decorativo** — isento por WCAG 1.4.3 ("pure decoration"): a informação está no `<blockquote>` e o glifo é enfeite tipográfico. Se quiser mais presença, `opacity: .65` dá 3,09:1 também no hover (1 linha).
 - **O `height: 0.35em` das aspas depende da métrica da Playfair Display**: com fonte de fallback a folga entre a tinta e o texto pode variar um pouco. Nunca sobrepõe o texto (o `gap` do flex segue em 20px); ajuste fino é um `margin-bottom` negativo na pseudo.
 - **Se a faixa full-bleed voltar um dia**, ela precisa de uma foto: o par `37803981` que eu havia escolhido (a mesma sessão do tile "Decoração externa com balões") ficou órfão — não está em lugar nenhum do site agora, e o contrato do Bloco 7 trava a **ausência** de qualquer `.bleed`.
+- **O parallax do hero ficou ~12% mais forte** (Bloco 8): o `translate` da imagem agora é composto **dentro** da escala do wrapper (0,056·y em vez de 0,05·y), porque antes o `translate3d(...) scale(1.12)` era uma função só, aplicada na ordem `scale→translate`. Imperceptível e é o preço de os dois transforms viverem em elementos diferentes.
+- **Em reduced-motion a foto do hero agora fica em 1.12** (Bloco 8): antes a seção 20 zerava o transform da imagem (`transform: none`) e ela caía para 1.0. É framing, não movimento — e o usuário de reduced-motion passa a ver a **mesma composição** do resto da página, só congelada.
+- **O Ken Burns só roda com `.js`** (Bloco 8, como no snippet do plano): se `main.js` falhar, o hero fica parado, com o mesmo enquadramento. No celular a regra nem existe (media query), então lá o hero é imóvel por desenho, não por degradação.
+- **O `.hero__mediawrap` ganhou `overflow: hidden` próprio** (Bloco 8): o `.hero` já recortava, mas a moldura não depende mais disso se aquela seção for mexida.
 
 ### Próximo bloco
 
-**Bloco 8 — Hero: Ken Burns + slot de vídeo.** *(O Bloco 7 está commitado em `21451e2` e **aprovado** pelo gate visual — "aprovado", 17/10 — depois de o respiro maior e a faixa full-bleed caírem no gate; o bloco fechou com os depoimentos editoriais.)*
+**Bloco 9 — Extras opcionais.** *(O Bloco 8 está commitado em `cfe034c` e **aprovado** pelo gate visual — "aprovado", 17/10 — com o Ken Burns perpétuo só no desktop. O Bloco 9 é o único que depende de escolha sua: ele é uma **lista**, não um bloco fechado, e cada item é opcional, com commit próprio.)*
 
 ---
 
@@ -505,15 +516,16 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 
 **Arquivos:**
 - Modify: `index.html` (envolver a mídia num wrapper `.hero__mediawrap`; comentário de slot de vídeo)
-- Modify: `assets/css/styles.css` (`.hero__mediawrap`, Ken Burns)
+- Modify: `assets/css/styles.css` (`.hero__mediawrap`, Ken Burns; a escala base migrou da imagem para o wrapper)
 - Modify: `assets/js/main.js` (reconciliar: parallax seta **variável** em vez de sobrescrever `transform`)
+- Add: `tests/hero-parallax.luxo.test.mjs` (3 testes de comportamento, RED-first — o plano não previa; o refactor do JS é testável e não estava coberto)
 
 **Interfaces:**
 - Consumes: nada novo.
 - Produces: `.hero__mediawrap`; variável `--hero-y`.
 
-- [ ] **Step 1:** Criar o wrapper para evitar conflito de `transform` entre parallax (JS) e Ken Burns (CSS).
-- [ ] **Step 2:** Ken Burns no wrapper (movimento lento e alternado, 24s):
+- [x] **Step 1:** Criar o wrapper para evitar conflito de `transform` entre parallax (JS) e Ken Burns (CSS). **Feito**, com o `overflow: hidden` que o plano já previa.
+- [x] **Step 2:** Ken Burns no wrapper (movimento lento e alternado, 24s). **Aplicado com 3 divergências** (ver decisões no topo): (a) a escala da imagem saiu e o wrapper ficou com **toda** ela — `1.12` parado no celular e em reduced-motion, `1.08 → 1.16` no desktop; o snippet abaixo, mantendo o `scale(1.12)` da imagem, chegaria a **1,28**; (b) a animação foi para dentro de `@media (min-width: 900px)` — decisão do humano: perpétua, mas só no desktop; (c) **sem** `will-change` (precedente do Bloco 2). O snippet do plano, para o registro:
 
 ```css
 .hero__mediawrap { position:absolute; inset:0; z-index:-1; overflow:hidden; }
@@ -523,13 +535,13 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 @media (prefers-reduced-motion: reduce) { .js .hero__mediawrap { animation: none; } }
 ```
 
-- [ ] **Step 3:** Ajustar o JS do parallax para setar `--hero-y` no wrapper e compor no CSS (`transform: translate3d(0,var(--hero-y,0),0)` num contexto que não conflite com a animação do wrapper — parallax no `img`, Ken Burns no wrapper).
-- [ ] **Step 4:** Adicionar o slot de vídeo comentado (poster = imagem atual, `muted loop playsinline preload="none"`), **sem** fonte — para ativar quando houver clipe.
-- [ ] **Step 5 (validação):** rolar o hero devagar; checar que não há "pulo" nem vão nas bordas; testar reduced-motion.
+- [x] **Step 3:** Ajustar o JS do parallax para setar `--hero-y` e compor no CSS. **Feito exatamente na divisão que o plano pedia** (parallax no `img`, Ken Burns no wrapper): `heroMedia.style.setProperty('--hero-y', ...)` e `transform: translate3d(0, var(--hero-y, 0px), 0)` no CSS. O `transform` inline e o `scale(1.12)` duplicado dentro da string do JS saíram junto — era o ganho estrutural do bloco.
+- [x] **Step 4:** Adicionar o slot de vídeo comentado (poster = imagem atual, `muted loop playsinline preload="none"`), **sem** fonte. **Feito**: comentário dentro do wrapper; o contrato trava "nenhum `<video>` real no HTML" e confere que o comentário guarda os atributos para reativar depois.
+- [x] **Step 5 (validação):** rolar o hero devagar; checar que não há "pulo" nem vão nas bordas; testar reduced-motion. **Feito**: sem vão em nenhuma largura (a folga da escala cobre o `translateY(-1.5%)` e o deslocamento do parallax); em reduced-motion o hero congela em 1.12; abaixo de 900px é imóvel.
 
-**Validação visual (gate):** o fundo do hero se move com vida, sem distrair; rolagem fluida no mobile.
+**Validação visual (gate):** o fundo do hero se move com vida, sem distrair; rolagem fluida no mobile. — **✅ aprovado pelo humano em 17/10, na primeira rodada** ("aprovado"; nenhum amend neste bloco). O humano escolheu "perpétuo, só no desktop" entre as 4 opções apresentadas (uma tacada que assenta / perpétuo como o plano / perpétuo só no desktop / sem Ken Burns). Números: 43/43 testes, 10 contratos sem falha (bloco8 25/25); a escala média do zoom é 1,12, exatamente o repouso aprovado no Bloco 4; folga mínima de borda 36px num hero de 900px; em reduced-motion o hero congela em 1.12 (a **mesma composição** do resto da página, parada).
 
-**Commit:** `feat(ux): hero com Ken Burns sutil e slot de vídeo preparado`
+**Commit:** `feat(ux): hero com Ken Burns sutil e slot de vídeo preparado` → em ASCII, pela convenção do repo: `cfe034c feat(ux): hero com Ken Burns perpetuo no desktop e parallax por variavel` *(o subject mudou porque "sutil" deixou de descrever o bloco: o movimento é perpétuo — confinado ao desktop — e o outro metade do trabalho é o parallax por variável)*.
 
 ---
 
@@ -551,7 +563,7 @@ Notas de execução (a resolver neste bloco, antes de escrever):
 - **Ordem recomendada:** 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → (9).
 - **Dependência:** todos os blocos 1–9 dependem do **Bloco 0** (tokens). Se um bloco for feito em sessão nova, incluir o Bloco 0 no contexto.
 - **Pode parar em qualquer ponto:** cada bloco entrega valor isolado; nenhum deixa o site "quebrado".
-- **Riscos principais:** jank de vidro no mobile (Bloco 6), conflito de transform no hero (Bloco 8), excesso de movimento (todos). Mitigações estão dentro de cada bloco.
+- **Riscos principais:** jank de vidro no mobile (Bloco 6), conflito de transform no hero (Bloco 8 — **resolvido**: wrapper + `--hero-y`), excesso de movimento (todos). Mitigações estão dentro de cada bloco.
 - **Rollback:** cada bloco é um commit; `git revert <hash>` desfaz só aquele bloco.
 
 ## Revisão global (depois do último bloco aprovado)
