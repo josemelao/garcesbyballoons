@@ -342,6 +342,10 @@
 
     /* -------------------------------------------------------------------
        6b. Parallax leve do hero (contido; desligado em movimento reduzido)
+       O deslocamento vai para a variável --hero-y e quem compõe é o CSS: o
+       transform da imagem pertence ao CSS (o zoom lento do Bloco 8 mora no
+       wrapper), então escrever `style.transform` daqui apagaria essa decisão a
+       cada quadro de rolagem.
        ------------------------------------------------------------------- */
     var heroEl = $('.hero');
     var heroMedia = $('.hero__media');
@@ -352,8 +356,7 @@
         heroRaf = false;
         var y = window.scrollY || window.pageYOffset || 0;
         if (y > heroEl.offsetHeight) { return; }
-        heroMedia.style.transform =
-          'translate3d(0, ' + (y * 0.05).toFixed(2) + 'px, 0) scale(1.12)';
+        heroMedia.style.setProperty('--hero-y', (y * 0.05).toFixed(2) + 'px');
       };
 
       window.addEventListener('scroll', function () {

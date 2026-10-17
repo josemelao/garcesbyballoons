@@ -204,11 +204,25 @@
      HERO
      ====================================================================== -->
 <section class="hero" id="top">
-  <img class="hero__media"
-       src="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1800"
-       srcset="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=800 800w, https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w, https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1800 1800w"
-       sizes="100vw"
-       alt="" width="1800" height="1200" fetchpriority="high" decoding="async">
+  <!-- O wrapper é a moldura do zoom lento (Ken Burns): o parallax escreve o
+       transform na imagem, e o zoom mora aqui — assim os dois não brigam pelo
+       mesmo elemento. -->
+  <div class="hero__mediawrap">
+    <img class="hero__media"
+         src="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1800"
+         srcset="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=800 800w, https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w, https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1800 1800w"
+         sizes="100vw"
+         alt="" width="1800" height="1200" fetchpriority="high" decoding="async">
+    <!-- Slot de vídeo (Bloco 8): quando existir um clipe, o <video> entra no
+         lugar da imagem, com o poster sendo esta mesma foto. Enquanto não há
+         fonte, fica desligado — um <video> sem fonte é um elemento vazio que o
+         leitor de tela anuncia.
+
+    <video class="hero__media"
+           poster="https://images.pexels.com/photos/36231146/pexels-photo-36231146.jpeg?auto=compress&cs=tinysrgb&w=1800"
+           muted loop playsinline preload="none" aria-hidden="true"></video>
+    -->
+  </div>
   <div class="hero__scrim" aria-hidden="true"></div>
 
   <div class="container hero__inner">

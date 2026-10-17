@@ -549,8 +549,42 @@ body.menu-open::before {
   height: 100%;
   opacity: 0.5;
 }
-/* 4.x — leve parallax: a mídia fica um pouco maior para o deslocamento não abrir vãos */
-.js .hero__media { transform: scale(1.12); will-change: transform; }
+/* Bloco 8 — a moldura do zoom lento (Ken Burns). O wrapper existe para o
+   transform do parallax (JS, na imagem) e o do zoom (CSS, aqui) não brigarem
+   pelo mesmo elemento. Gate 17/10: o movimento é perpétuo, mas SÓ no desktop
+   (>= 900px) — no celular o hero fica imóvel; rasterizar um bitmap de 1800w em
+   tela cheia o tempo todo não se paga em ~5s de visita. Sem `will-change` no
+   wrapper: a animação já promove a camada (precedente do Bloco 2). */
+.hero__mediawrap {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+.hero__mediawrap .hero__media { position: absolute; inset: 0; }
+
+/* A escala base de 1.12 saiu da imagem e passou para o wrapper: empilhada com a
+   do Ken Burns ela multiplicaria (1.12 x 1.16 = 1.28, um zoom que ninguém
+   aprovou). Aqui ela é a folga que o deslocamento do parallax e o translateY do
+   zoom precisam nas bordas — e é ela que fica no celular e em reduced-motion: o
+   mesmo enquadramento de antes, parado. */
+.js .hero__mediawrap { transform: scale(1.12); }
+
+@media (min-width: 900px) {
+  .js .hero__mediawrap { animation: kb 24s var(--ease-soft) infinite alternate; }
+}
+
+/* Do 1.08 ao 1.16: a média (1.12) é o repouso aprovado no Bloco 4, então o
+   enquadramento médio é o mesmo que já estava validado no gate. */
+@keyframes kb {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1.16) translateY(-1.5%); }
+}
+
+/* 8.x — o CSS é dono do transform da imagem: o JS só publica --hero-y. Antes o
+   JS escrevia `transform` inline (com o scale duplicado dentro da string) a cada
+   quadro de rolagem, e qualquer mudança de CSS no transform era ignorada. */
+.js .hero__media { transform: translate3d(0, var(--hero-y, 0px), 0); will-change: transform; }
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -1895,6 +1929,9 @@ body.menu-open::before {
   /* Bloco 5: o zoom do tile não anima (congela na imagem de repouso) */
   .tile:hover img { transform: none; }
 
+  /* Bloco 8: o Ken Burns congela na escala base do wrapper — mesmo
+     enquadramento, sem movimento (a imagem não anima nada aqui) */
+  .js .hero__mediawrap { animation: none; }
   .js .hero__media { transform: none; will-change: auto; }
 }
 
@@ -1902,7 +1939,7 @@ body.menu-open::before {
    21. Impressão
    -------------------------------------------------------------------------- */
 @media print {
-  .nav, .wa-bubble, .hero__media, .preview-notice { display: none; }
+  .nav, .wa-bubble, .hero__mediawrap, .hero__media, .preview-notice { display: none; }
   body { background: #fff; color: #000; }
   /* o gradiente recortado não é impresso: garante texto preto legível no papel */
   .text-gold-metal, .hero__title em {
