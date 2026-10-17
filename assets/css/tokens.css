@@ -108,6 +108,10 @@
   /* --- Ouro metálico ----------------------------------------------------- */
   --gold-hi:    #F3E1A3;
   --gold-metal: linear-gradient(135deg, #F3E1A3 0%, #D4AF37 38%, #A16207 72%, #E8CD6B 100%);
+  /* variante só com stops claros (≥9:1 no escuro): segura em texto pequeno */
+  --gold-metal-sm: linear-gradient(135deg, #F3E1A3 0%, #E8CD6B 48%, #D4AF37 100%);
+  /* variante escura (≥4.6:1 no creme): para a faixa clara (#sobre) */
+  --gold-metal-deep: linear-gradient(135deg, #B45309 0%, #A16207 45%, #7C4A00 100%);
   --sheen:      linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.5) 48%, transparent 66%);
 
   /* --- Material (textura) ------------------------------------------------ */

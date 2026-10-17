@@ -149,6 +149,17 @@ body::after {
   background-clip: text;
   color: transparent;
 }
+/* Variantes do utilitário (entram depois da base, e a base já dá o recorte):
+   --sm para texto pequeno (wordmark) e --deep para a faixa clara. As duas usam
+   o gradiente inteiro (100%), porque não são animadas como o hero. */
+.text-gold-metal--sm {
+  background-image: var(--gold-metal-sm);
+  background-size: 100% 100%;
+}
+.text-gold-metal--deep {
+  background-image: var(--gold-metal-deep);
+  background-size: 100% 100%;
+}
 
 /* --------------------------------------------------------------------------
    4. Cabeçalho de seção
