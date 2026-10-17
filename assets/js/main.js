@@ -640,6 +640,13 @@
          (evita o submit vazio por GET que recarregava e perdia os dados). */
       form.setAttribute('novalidate', '');
 
+      /* data do evento: o mínimo é hoje (evita data passada) */
+      var dataInput = doc.getElementById('data-evento');
+      if (dataInput) {
+        var hoje = new Date();
+        dataInput.setAttribute('min', hoje.toISOString().slice(0, 10));
+      }
+
       var submitBtn = $('#form-submit');
       var submitLabel = $('#form-submit-label');
       var statusBox = $('#form-status');
@@ -655,6 +662,17 @@
           var digits = v.replace(/\D/g, '');
           if (!digits) { return 'Informe o seu telefone com DDD.'; }
           if (digits.length < 10 || digits.length > 13) { return 'Número inválido. Use DDD + número.'; }
+          return '';
+        },
+        'data-evento': function (v) {
+          if (!v) { return 'Informe a data do evento.'; }
+          var hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+          var data = new Date(v + 'T00:00:00');
+          if (data < hoje) { return 'A data não pode ser passada.'; }
+          return '';
+        },
+        cidade: function (v) {
+          if (!v) { return 'Selecione a cidade do evento.'; }
           return '';
         },
         servico: function (v) {
@@ -781,6 +799,8 @@
         return {
           nome: (form.elements.nome.value || '').trim(),
           telefone: (form.elements.telefone.value || '').trim(),
+          'data-evento': form.elements['data-evento'] ? form.elements['data-evento'].value || '' : '',
+          cidade: form.elements['cidade'] ? form.elements['cidade'].value || '' : '',
           servico: form.elements.servico.value || '',
           mensagem: (form.elements.mensagem.value || '').trim()
         };
@@ -792,6 +812,8 @@
           '',
           'Nome: ' + data.nome,
           'Telefone: ' + data.telefone,
+          'Data do evento: ' + data['data-evento'],
+          'Cidade: ' + data.cidade,
           'Serviço de interesse: ' + data.servico,
           '',
           data.mensagem

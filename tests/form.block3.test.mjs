@@ -117,7 +117,7 @@ test('3.7 · submit inválido revela resumo no topo, focado e anunciado', () => 
     'o resumo deve vir antes dos campos (no topo do formulário)'
   );
 
-  for (const name of ['nome', 'telefone', 'servico', 'mensagem']) {
+  for (const name of ['nome', 'telefone', 'data-evento', 'cidade', 'servico', 'mensagem']) {
     assert.ok(summary.querySelector(`a[href="#${name}"]`), `resumo deve linkar o campo ${name}`);
   }
 
@@ -136,6 +136,8 @@ test('3.7 · submit válido esconde o resumo e usa status polite', async () => {
 
   doc.getElementById('nome').value = 'Maria Silva';
   doc.getElementById('telefone').value = '61999998888';
+  doc.getElementById('data-evento').value = '2026-12-25';
+  doc.getElementById('cidade').value = 'Cidade Ocidental';
   doc.getElementById('servico').value = 'Workshop para iniciantes';
   doc.getElementById('mensagem').value = 'Gostaria de um orçamento para o meu evento.';
 
