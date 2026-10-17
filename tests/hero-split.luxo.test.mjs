@@ -1,10 +1,13 @@
 /* ==========================================================================
-   Luxo / Bloco 3 — split-text do H1 (hero)
+   Luxo / Bloco 3 — coreografia de entrada (split-text do H1 + máscara)
 
-   O split é a única parte do passe de luxo com comportamento testável: ele
-   reescreve os filhos do H1. Estes testes garantem que a coreografia preserva
-   o markup inline (o <em> com ouro metálico do Bloco 1) e que o fallback sem
-   JS / com movimento reduzido continua mostrando o título inteiro.
+   É a parte do passe de luxo com comportamento testável: o split reescreve os
+   filhos do H1 e a máscara das imagens depende do evento de load.
+
+   Estes testes garantem que a coreografia preserva o markup inline (o <em> com
+   ouro metálico do Bloco 1), que a máscara só abre quando os pixels chegam (com
+   rede de segurança) e que os fallbacks sem JS / com movimento reduzido seguem
+   mostrando título e imagens.
 
    Rode com: npm test
    ========================================================================== */
