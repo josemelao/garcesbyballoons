@@ -556,6 +556,48 @@ body.menu-open::before {
 }
 
 /* --------------------------------------------------------------------------
+   8b. Aura (fundo "vivo" procedural: auras douradas lentas + grão global)
+   -------------------------------------------------------------------------- */
+.section--aura {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.section--aura > .container {
+  position: relative;
+  z-index: 1;
+}
+.section--aura::before,
+.section--aura::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  /* gradientes radiais já pré-suavizados (sem filter: blur, que é caro) */
+  background:
+    radial-gradient(38% 42% at 22% 28%, var(--aura-gold), transparent 70%),
+    radial-gradient(32% 36% at 78% 70%, var(--aura-gold), transparent 72%);
+}
+.section--aura::after {
+  background:
+    radial-gradient(30% 34% at 70% 22%, rgba(232, 205, 107, 0.07), transparent 72%),
+    radial-gradient(34% 38% at 28% 78%, rgba(212, 175, 55, 0.09), transparent 74%);
+}
+
+@keyframes aura-drift {
+  from { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+  to   { transform: translate3d(2%, 1.5%, 0) scale(1.08); }
+}
+.section--aura::before { animation: aura-drift 46s var(--ease-soft) infinite alternate; }
+.section--aura::after  { animation: aura-drift 62s var(--ease-soft) infinite alternate-reverse; }
+
+@media (prefers-reduced-motion: reduce) {
+  .section--aura::before,
+  .section--aura::after { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
    9. Grades e cartões
    -------------------------------------------------------------------------- */
 .grid { display: grid; gap: var(--sp-6); }
