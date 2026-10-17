@@ -168,6 +168,18 @@ test('luxo/6 · #servicos: o card destacado (.service--feature) também recebe',
   dom.window.close();
 });
 
+test('luxo/7 · #depoimentos: o card de depoimento também recebe --mx/--my', async () => {
+  const dom = boot();
+  const primeiro = alvos(dom, '#depoimentos .quote')[0];
+
+  mover(dom, primeiro, 45, 18);
+  await flush();
+
+  assert.equal(primeiro.style.getPropertyValue('--mx'), '45px');
+  assert.equal(primeiro.style.getPropertyValue('--my'), '18px');
+  dom.window.close();
+});
+
 /* --------------------------------------------------------------- guardas --- */
 
 test('luxo/6 · desligado em movimento reduzido (e ligado quando não é)', async () => {

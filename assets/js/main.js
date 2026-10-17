@@ -384,12 +384,13 @@
     });
 
     /* -------------------------------------------------------------------
-       6d. Spotlight dos cards (#servicos, #formacao, #como-funciona)
+       6d. Spotlight dos cards (#servicos, #formacao, #como-funciona,
+           #depoimentos)
        O glow do hover é CSS; o JS só move a luz para debaixo do cursor
        escrevendo --mx/--my (px, relativos ao card). Uma escrita por quadro,
        em ponteiro fino e sem movimento reduzido — em touch não há listener.
        ------------------------------------------------------------------- */
-    var spotlightTargets = $$('.card, .service, .service--feature, .program');
+    var spotlightTargets = $$('.card, .service, .service--feature, .program, .quote');
 
     if (spotlightTargets.length && !prefersReduced() &&
         window.matchMedia('(hover: hover) and (pointer: fine)').matches) {

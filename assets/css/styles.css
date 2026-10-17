@@ -853,15 +853,16 @@ body.menu-open::before {
 .service__body { min-width: 0; }
 .services__list .service__text { margin-top: var(--sp-3); }
 
-/* Depoimentos / prova social (Bloco 6) */
+/* Depoimentos / prova social (Bloco 7 — versão editorial) */
 .quotes {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--sp-4);
+  gap: var(--sp-6);
 }
 @media (max-width: 900px) { .quotes { grid-template-columns: 1fr; } }
 
 .quote {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--sp-5);
@@ -870,17 +871,40 @@ body.menu-open::before {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
+  /* Bloco 7: mesmo contexto e mesma pele de hover dos cards dos Blocos 6/7 —
+     o ::after é o glow compartilhado (seção 19c) */
+  isolation: isolate;
+  transition: background-color var(--dur-hover) var(--ease-hover),
+              border-color var(--dur-hover) var(--ease-hover);
 }
+/* Aspas grandes decorativas: em bloco (não absolutas), então nunca cobrem o
+   texto nem dependem do padding do card. Substituem o par inline que existia
+   no .quote__text (o <blockquote> já é semântico). */
+.quote::before {
+  content: "\201C";
+  display: block;
+  font-family: var(--font-display);
+  font-size: 3.25rem;
+  line-height: 0.75;
+  /* Gate 17/10: a caixa da linha e bem mais alta que a tinta das aspas (elas
+     pendem do topo), entao sobrava um vao morto grande entre as aspas e o
+     texto. A caixa curta encosta o texto na tinta sem risco de sobrepor. */
+  height: 0.35em;
+  color: var(--gold);
+  opacity: 0.5;
+}
+.quote:hover,
+.quote:focus-within { background: var(--surface-2); border-color: var(--border-gold-strong); }
 .quote__text {
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.65;
   font-style: italic;
   color: var(--text);
 }
-.quote__text::before { content: "\201C"; }
-.quote__text::after { content: "\201D"; }
 .quote__author {
   margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border);
   font-size: var(--fs-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1808,14 +1832,15 @@ body.menu-open::before {
 
 /* Pele featured no hover — UMA camada de glow por card, atrás do texto
    (`z-index: -1` + `isolation: isolate` no card, como o ::before do .btn do
-   Bloco 4). Em #servicos, #formacao e #como-funciona todos os cards ficam
-   idênticos em repouso; a hierarquia aparece no hover/:focus-within. O glow
-   segue o cursor nos três (--mx/--my, passo 6d do main.js); sem ponteiro
-   (teclado) fica no topo, que é o default das variáveis. */
+   Bloco 4). Em #servicos, #formacao, #como-funciona e #depoimentos todos os
+   cards ficam idênticos em repouso; a hierarquia aparece no hover/:focus-within.
+   O glow segue o cursor nos quatro (--mx/--my, passo 6d do main.js); sem
+   ponteiro (teclado) fica no topo, que é o default das variáveis. */
 .card::after,
 .service::after,
 .service--feature::after,
-.program::after {
+.program::after,
+.quote::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1833,7 +1858,9 @@ body.menu-open::before {
 .service--feature:hover::after,
 .service--feature:focus-within::after,
 .program:hover::after,
-.program:focus-within::after { opacity: 1; }
+.program:focus-within::after,
+.quote:hover::after,
+.quote:focus-within::after { opacity: 1; }
 
 /* --------------------------------------------------------------------------
    20. Movimento reduzido
